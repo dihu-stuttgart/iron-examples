@@ -649,7 +649,7 @@ PROGRAM MONODOMAINEXAMPLE
   CALL cmfe_Solver_DAETimeStepSet(Solver,ODE_TIME_STEP,Err) 
   !changing to the Heun method for the Strang-Splitting
   IF(SplittingOrder .EQ. "O2") THEN
-    CALL cmfe_Solver_DAEEulerSolverTypeSet(Solver,CMFE_SOLVER_DAE_EULER_IMPROVED,Err)
+    !!!CALL cmfe_Solver_DAEEulerSolverTypeSet(Solver,CMFE_SOLVER_DAE_EULER_IMPROVED,Err)
   ENDIF
   
   CALL cmfe_Solver_OutputTypeSet(Solver,CMFE_SOLVER_NO_OUTPUT,Err)
