@@ -39,12 +39,12 @@ def get_timestep(foldername):
   return timestep
 ###############################################################################
 # get the data for the time convergence study from the current_run folder 
-def get_data_TimeConv(time):
+def get_data_TimeConv(time,order):
 
   global folder
    
   ls = os.listdir(folder)
-  condition_folder= lambda name: "l1x1" in name and gridsize in name
+  condition_folder= lambda name: "l1x1" in name and gridsize in name and "O"+str(order) in name
   ls_selected=list(np.extract(map(condition_folder,ls),ls))
   subfolders=sorted(ls_selected)
   #print "subfolders:", subfolders
@@ -135,8 +135,9 @@ def makeplot_TimeConv_err(x,y,labels):
   fig.savefig(imagename)
   print "Figure saved to {}".format(imagename)
 ###############################################################################
+#Vm=[0.0 for i in range(1)]
 
-x,Vm,timesteps=get_data_TimeConv(time)
+x,Vm,timesteps=get_data_TimeConv(time,2)
 makeplot_TimeConv(x,Vm,timesteps)
 
 err_L2=[0.0 for i in range(1)]

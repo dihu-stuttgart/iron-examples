@@ -19,5 +19,4 @@ mkdir -p results/current_run/l1x1_n2048_i1_s0_O2_dt005 && ./$folder/src/example 
 mkdir -p results/current_run/l1x1_n2048_i1_s0_O2_dt002 && ./$folder/src/example 2048 1 0 0.002 10 25 slow_TK_2014_12_08.xml T 0.0004 O2 && mv *.ex* results/current_run/l1x1_n2048_i1_s0_O2_dt002
 mkdir -p results/current_run/l1x1_n2048_i1_s0_O2_dt001 && ./$folder/src/example 2048 1 0 0.001 10 50 slow_TK_2014_12_08.xml T 0.0002 O2 && mv *.ex* results/current_run/l1x1_n2048_i1_s0_O2_dt001
 mkdir -p results/current_run/l1x1_n2048_i1_s0_O2_dt0005 && ./$folder/src/example 2048 1 0 0.0005 10 100 slow_TK_2014_12_08.xml T 0.0001 O2 && mv *.ex* results/current_run/l1x1_n2048_i1_s0_O2_dt0005
-
-
+mkdir -p results/current_run/l1x1_n2047_i1_s0_O2_dt00025 && ./$folder/src/example 2047 1 0 0.00025 10 200 slow_TK_2014_12_08.xml T 0.00005 O2 && mv *.ex* results/current_run/l1x1_n2047_i1_s0_O2_dt00025
