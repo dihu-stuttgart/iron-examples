@@ -1,0 +1,49 @@
+[Buildset]
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x0c\x00c\x00u\x00b\x00o\x00i\x00d)
+
+[CMake]
+Build Directory Count=1
+Current Build Directory Index=0
+ProjectRootRelative=./
+
+[CMake][CMake Build Directory 0]
+Build Directory Path=file:///store/DiHu/software/opencmiss/examples/cuboid/build_debug
+Build Type=DEBUG
+CMake Binary=file:///usr/bin/cmake
+Environment Profile=
+Extra Arguments=-DOPENCMISS_BUILD_TYPE=DEBUG -DCMAKE_BUILD_TYPE=DEBUG\s
+Install Directory=file:///usr/local
+
+[CustomDefinesAndIncludes][ProjectPath0]
+Defines=\x00\x00\x00\x00
+Includes=\x00\x00\x00\x01\x00\x00\x00b\x00/\x00s\x00t\x00o\x00r\x00e\x00/\x00D\x00i\x00H\x00u\x00/\x00s\x00o\x00f\x00t\x00w\x00a\x00r\x00e\x00/\x00o\x00p\x00e\x00n\x00c\x00m\x00i\x00s\x00s\x00/\x00i\x00r\x00o\x00n\x00/\x00s\x00r\x00c\x00/\x00i\x00r\x00o\x00n\x00/\x00s\x00r\x00c\x00/
+Path=.
+
+[Defines And Includes][Compiler]
+Name=GCC
+Path=gcc
+Type=GCC
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=serial
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Arguments=input 2 1 1 1
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Nothing
+EnvironmentGroup=
+Executable=file:///store/DiHu/software/opencmiss/examples/cuboid/
+External Terminal=konsole --noclose --workdir %workdir -e %exe
+Project Target=cuboid,Fortran,cuboid
+Use External Terminal=false
+Working Directory=
+isExecutable=false
+
+[Project]
+VersionControlSupport=kdevgit

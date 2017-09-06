@@ -1,0 +1,652 @@
+<?xml version='1.0'?>
+<model cmeta:id="razumova_bukatina_campbell_1999" name="razumova_bukatina_campbell_1999" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+    <units name="per_second">
+        <unit exponent="-1" units="second"/>
+    </units>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+    </component>
+    <component name="equations">
+        <variable initial_value="1e-4" name="D" units="dimensionless"/>
+        <variable initial_value="1e-4" name="A_1" units="dimensionless"/>
+        <variable initial_value="1e-4" name="A_2" units="dimensionless"/>
+        <variable name="R_off" units="dimensionless"/>
+        <variable initial_value="8e-9" name="x_0" units="dimensionless"/>
+        <variable initial_value="1e-16" name="x_1" units="dimensionless"/>
+        <variable initial_value="8e-9" name="x_2" units="dimensionless"/>
+        <variable initial_value="10" name="Ca" units="dimensionless"/>
+        <variable initial_value="1" name="Ca0_50" units="dimensionless"/>
+        <variable name="Ca_50" units="dimensionless"/>
+        <variable name="Ca_ratio" units="dimensionless"/>
+        <variable initial_value="1e-7" name="v" units="per_second"/>
+        <variable initial_value="1" name="l_hs" units="dimensionless"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <variable initial_value="0" name="k0_on" units="per_second"/>
+        <variable initial_value="100" name="k0_off" units="per_second"/>
+        <variable initial_value="120" name="kCa_on" units="per_second"/>
+        <variable initial_value="50" name="kCa_off" units="per_second"/>
+        <variable initial_value="4" name="g_0" units="per_second"/>
+        <variable initial_value="50" name="f_0" units="per_second"/>
+        <variable initial_value="8" name="h_0" units="per_second"/>
+        <variable name="g" units="per_second"/>
+        <variable name="f" units="per_second"/>
+        <variable name="h" units="per_second"/>
+        <variable name="k_on" units="per_second"/>
+        <variable name="k_off" units="per_second"/>
+        <variable initial_value="400" name="f_prime0" units="per_second"/>
+        <variable initial_value="6" name="h_prime0" units="per_second"/>
+        <variable initial_value="3.5400e-10" name="g_prime0" units="per_second"/>
+        <variable name="f_prime" units="per_second"/>
+        <variable name="h_prime" units="per_second"/>
+        <variable name="g_prime" units="per_second"/>
+        <variable initial_value="1" name="R_T" units="dimensionless"/>
+        <variable initial_value="9.1362e-20" name="E_ATP" units="dimensionless"/>
+        <variable initial_value="1.38e-23" name="kappa" units="dimensionless"/>
+        <variable initial_value="310" name="T" units="dimensionless"/>
+        <variable initial_value="4" name="nu" units="dimensionless"/>
+        <variable name="sigma" units="dimensionless"/>
+        <variable initial_value="1" name="sigma_minus" units="dimensionless"/>
+        <variable initial_value="8" name="sigma_plus" units="dimensionless"/>
+        <variable name="lambda_A1" units="dimensionless"/>
+        <variable name="lambda_A2" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Ca_50</ci>
+                <ci>Ca0_50</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ca_ratio</ci>
+                <apply>
+                    <divide/>
+                    <ci>Ca</ci>
+                    <ci>Ca_50</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_on</ci>
+                <apply>
+                    <plus/>
+                    <ci>k0_on</ci>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>kCa_on</ci>
+                                <ci>k0_on</ci>
+                            </apply>
+                            <ci>Ca_ratio</ci>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>Ca_ratio</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_off</ci>
+                <apply>
+                    <plus/>
+                    <ci>k0_off</ci>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>kCa_off</ci>
+                                <ci>k0_off</ci>
+                            </apply>
+                            <ci>Ca_ratio</ci>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>Ca_ratio</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>sigma</ci>
+                <piecewise>
+                    <piece>
+                        <ci>sigma_plus</ci>
+                        <apply>
+                            <gt/>
+                            <ci>x_2</ci>
+                            <ci>x_0</ci>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <ci>sigma_minus</ci>
+                        <apply>
+                            <lt/>
+                            <ci>x_2</ci>
+                            <ci>x_0</ci>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="dimensionless">0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>lambda_A1</ci>
+                <apply>
+                    <divide/>
+                    <ci>A_1</ci>
+                    <ci>R_T</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>lambda_A2</ci>
+                <apply>
+                    <divide/>
+                    <ci>A_2</ci>
+                    <ci>R_T</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>f</ci>
+                <apply>
+                    <times/>
+                    <ci>f_0</ci>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <apply>
+                                <times/>
+                                <ci>lambda_A1</ci>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <times/>
+                                            <apply>
+                                                <divide/>
+                                                <ci>x_1</ci>
+                                                <ci>x_0</ci>
+                                            </apply>
+                                            <apply>
+                                                <minus/>
+                                                <ci>nu</ci>
+                                                <cn cellml:units="dimensionless">1</cn>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>lambda_A2</ci>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <times/>
+                                            <apply>
+                                                <divide/>
+                                                <ci>x_2</ci>
+                                                <ci>x_0</ci>
+                                            </apply>
+                                            <apply>
+                                                <minus/>
+                                                <ci>nu</ci>
+                                                <cn cellml:units="dimensionless">1</cn>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <cn cellml:units="dimensionless">2</cn>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>g</ci>
+                <apply>
+                    <times/>
+                    <ci>g_0</ci>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <times/>
+                            <ci>sigma</ci>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <minus/>
+                                    <ci>x_2</ci>
+                                    <ci>x_0</ci>
+                                </apply>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>h</ci>
+                <apply>
+                    <times/>
+                    <ci>h_0</ci>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <times/>
+                            <ci>sigma</ci>
+                            <apply>
+                                <power/>
+                                <ci>x_1</ci>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>f_prime</ci>
+                <apply>
+                    <times/>
+                    <ci>f_prime0</ci>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <times/>
+                            <ci>sigma</ci>
+                            <apply>
+                                <power/>
+                                <ci>x_1</ci>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>h_prime</ci>
+                <apply>
+                    <times/>
+                    <ci>h_prime0</ci>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <times/>
+                            <ci>sigma</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <power/>
+                                    <ci>x_2</ci>
+                                    <cn cellml:units="dimensionless">2</cn>
+                                </apply>
+                                <apply>
+                                    <power/>
+                                    <ci>x_1</ci>
+                                    <cn cellml:units="dimensionless">2</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>g_prime</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>f</ci>
+                            <ci>h</ci>
+                            <ci>g</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>f_prime</ci>
+                            <ci>h_prime</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <minus/>
+                                <ci>E_ATP</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>kappa</ci>
+                                <ci>T</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>D</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>k_on</ci>
+                            <ci>R_off</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>f_prime</ci>
+                            <ci>A_1</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>g</ci>
+                            <ci>A_2</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>k_off</ci>
+                            <ci>f</ci>
+                            <ci>g_prime</ci>
+                        </apply>
+                        <ci>D</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>A_1</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>f</ci>
+                            <ci>D</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>h_prime</ci>
+                            <ci>A_2</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>f_prime</ci>
+                            <ci>h</ci>
+                        </apply>
+                        <ci>A_1</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>A_2</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>h</ci>
+                            <ci>A_1</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <plus/>
+                                <ci>h_prime</ci>
+                                <ci>g</ci>
+                            </apply>
+                            <ci>A_2</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>g_prime</ci>
+                        <ci>D</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>R_off</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <ci>R_T</ci>
+                            <ci>D</ci>
+                        </apply>
+                        <ci>A_1</ci>
+                    </apply>
+                    <ci>A_2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>x_2</ci>
+                </apply>
+                <piecewise>
+                    <piece>
+                        <ci>v</ci>
+                        <apply>
+                            <eq/>
+                            <ci>A_2</ci>
+                            <cn cellml:units="dimensionless">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <apply>
+                                            <minus/>
+                                            <ci>h</ci>
+                                        </apply>
+                                        <ci>A_1</ci>
+                                    </apply>
+                                    <ci>A_2</ci>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <ci>x_2</ci>
+                                    <ci>x_0</ci>
+                                </apply>
+                            </apply>
+                            <ci>v</ci>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>x_1</ci>
+                </apply>
+                <cn cellml:units="dimensionless">0</cn>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="equations"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Seq xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#61c27fc7-1e8d-4a7f-90f7-b1b83627aa8e">
+            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="rdf:#eec1b0db-f1e3-415b-9ed1-4aa20847dadd"/>
+            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="rdf:#43d69569-8b24-4b17-ac7f-a92af4103547"/>
+            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="rdf:#8e436f8f-9b06-49db-8172-635ac41d4e85"/>
+        </rdf:Seq>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#dd051d58-2634-469b-a7d4-6230acabeff0">
+            <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#1bd1d9b7-b81d-48cd-9da1-dc0d135d82f8" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#87a3d75b-093f-49f5-bdd7-a9b50ffd6500" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#e2953c5e-9b1c-432d-8266-d346c64a6baa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#eec1b0db-f1e3-415b-9ed1-4aa20847dadd">
+            <rdf:type xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+            <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#fe73e882-67ec-492f-8ab3-cb17f97a5a2f" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="">
+            <dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/"/>
+            <cmeta:comment xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#e5425559-b4d4-4ae3-b8c2-c632a0a2aa7b" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#3da62c87-1db4-4720-a3cf-c66938a981aa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#dd051d58-2634-469b-a7d4-6230acabeff0" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#8e436f8f-9b06-49db-8172-635ac41d4e85">
+            <rdf:type xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+            <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#c33c5a33-9ecf-4137-bc54-f497eb2266c6" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#ece70108-e563-4452-872c-ca39cc2d6c2e">
+            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#d2884a10-724d-4c47-8e82-a19817a18d75" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">This model runs in PCEnv and COR, and the units are consistent throughout. It is not yet an accurate match for the experimental results.</rdf:value>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#fe73e882-67ec-492f-8ab3-cb17f97a5a2f">
+            <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Maria</vCard:Given>
+            <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Razumova</vCard:Family>
+            <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">V</vCard:Other>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#61a079fd-869c-466e-bb51-14572493c13e">
+            <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">10562631</bqs:Pubmed_id>
+            <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#8a4ba94b-f40f-4686-a252-1b1bca7911f1" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#d2884a10-724d-4c47-8e82-a19817a18d75">
+            <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Geoff Nunns</vCard:FN>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#6c720094-73a0-49b2-a600-4b7f7e780d97">
+            <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">1999-11-00 00:00</dcterms:W3CDTF>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#1bd1d9b7-b81d-48cd-9da1-dc0d135d82f8">
+            <vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Auckland Bioengineering Institute</vCard:Orgname>
+            <vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">CellML Team</vCard:Orgunit>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#e5425559-b4d4-4ae3-b8c2-c632a0a2aa7b">
+            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#00f5bbfc-b50e-4efd-90d2-cb14cdf0615b" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">This model runs in PCEnv and COR, and the units are consistent throughout. It is not yet an accurate match for the experimental results.</rdf:value>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#razumova_bukatina_campbell_1999">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#61a079fd-869c-466e-bb51-14572493c13e" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">electrophysiology</rdf:li>
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">sacromere</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+            <cmeta:comment xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#ece70108-e563-4452-872c-ca39cc2d6c2e" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#87a3d75b-093f-49f5-bdd7-a9b50ffd6500">
+            <rdf:type xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://imc.org/vCard/3.0#internet"/>
+            <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">gnunns1@jhem.jhu.edu</rdf:value>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#00f5bbfc-b50e-4efd-90d2-cb14cdf0615b">
+            <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Geoff Nunns</vCard:FN>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#e2953c5e-9b1c-432d-8266-d346c64a6baa">
+            <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Geoffrey</vCard:Given>
+            <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Nunns</vCard:Family>
+            <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Rogan</vCard:Other>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#c33c5a33-9ecf-4137-bc54-f497eb2266c6">
+            <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Kenneth</vCard:Given>
+            <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Campbell</vCard:Family>
+            <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">B</vCard:Other>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#c15d4631-bb00-4391-8762-e59ea4e549f4">
+            <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Journal of Applied Physiology</dc:title>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#43d69569-8b24-4b17-ac7f-a92af4103547">
+            <rdf:type xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+            <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#d6edb0ce-a918-447e-894b-44c9efb0775b" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#d6edb0ce-a918-447e-894b-44c9efb0775b">
+            <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Anna</vCard:Given>
+            <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Bukatina</vCard:Family>
+            <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">E</vCard:Other>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#8a4ba94b-f40f-4686-a252-1b1bca7911f1">
+            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#61c27fc7-1e8d-4a7f-90f7-b1b83627aa8e" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Stiffness-distortion sacromere model for muscle stimulation</dc:title>
+            <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">87</bqs:volume>
+            <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">1861</bqs:first_page>
+            <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#c15d4631-bb00-4391-8762-e59ea4e549f4" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#6c720094-73a0-49b2-a600-4b7f7e780d97" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">1876</bqs:last_page>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="rdf:#3da62c87-1db4-4720-a3cf-c66938a981aa">
+            <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2008-07-27T00:00:00+12:00</dcterms:W3CDTF>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

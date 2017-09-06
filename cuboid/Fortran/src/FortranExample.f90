@@ -229,17 +229,16 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   
   !all times in [ms]
   REAL(CMISSRP) :: time
-  REAL(CMISSRP), PARAMETER :: PERIODD=10.0_CMISSRP ! ### PAPERBRANCH SETTING
-  REAL(CMISSRP)            :: TimeStop=10.0_CMISSRP ! ### PAPERBRANCH SETTING
+  REAL(CMISSRP) :: StimPeriod=10.0_CMISSRP ! ### PAPERBRANCH SETTING
+  REAL(CMISSRP) :: TimeStop=10.0_CMISSRP ! ### PAPERBRANCH SETTING
 
+  REAL(CMISSRP) :: ODETimeStep = 0.0001_CMISSRP ! ### PAPERBRANCH SETTING: 0.0001
+  REAL(CMISSRP) :: PDETimeStep = 0.0005_CMISSRP ! ### PAPERBRANCH SETTING: 0.0005
   REAL(CMISSRP) :: ElasticityTimeStep = 0.1_CMISSRP ! ### PAPERBRANCH SETTING
-  REAL(CMISSRP) :: PDETimeStep = 0.005_CMISSRP ! ### PAPERBRANCH SETTING:  0.0005
-  REAL(CMISSRP) :: ODETimeStep = 0.0005_CMISSRP ! ### PAPERBRANCH SETTING: 0.0001
 
-!tomo keep ElasticityTimeStep and STIM_STOP at the same values
-  REAL(CMISSRP), PARAMETER :: STIM_STOP=0.1_CMISSRP ! ### PAPERBRANCH SETTING ! ElasticityTimeStep
+  REAL(CMISSRP) :: StimDuration=0.1_CMISSRP ! ### PAPERBRANCH SETTING ! should be the same as ElasticityTimeStep
 
-  INTEGER(CMISSIntg)  :: OutputTimestepStride=1  ! (10)
+  INTEGER(CMISSIntg)  :: OutputTimestepStride=10  ! (10)
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -249,7 +248,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
 
   REAL(CMISSRP) :: PMax=7.3_CMISSRP ! ### PAPERBRANCH SETTING ! N/cm^2
 
-  !condctivity in [mS/cm] - This is sigma
+  !conductivity in [mS/cm] - This is sigma
   REAL(CMISSRP) :: Conductivity=3.828_CMISSRP ! ### PAPERBRANCH SETTING
 
   !surface area to volume ratio in [cm^-1]
@@ -265,7 +264,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
     &  11.0_CMISSRP,1.0_CMISSRP,6.0_CMISSRP, &                                                  ! ### NOT RELEVANT FOR PAPER
     &  1.0_CMISSRP,2.2e-9_CMISSRP]                                                              ! ### NOT RELEVANT FOR PAPER
 
-  !maximum contraction velocity in [cm/ms] Keine Rolle
+  !maximum contraction velocity in [cm/ms] not relevant for paper
   REAL(CMISSRP) :: VMax=-0.02_CMISSRP ! =0.2 m/s, rat GM                                        ! ### NOT RELEVANT FOR PAPER (isometric conditions)
 
   !CAUTION - what are the units???   ![N/cm^2]?
@@ -277,24 +276,24 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   REAL(CMISSRP) :: TkLinParam=1.0_CMISSRP ! 1: With Actin-Tintin Interaction 0: No Actin-Titin Interactions    ! ### NOT RELEVANT FOR PAPER
 
   !Inital Conditions
-  REAL(CMISSRP) :: InitialStretch=1.0_CMISSRP   ! previous value in new mechanical description: 1.2_CMISSRP    ! ### TO BE REMOVED. Now: simply deactivated problem_solve().
+  REAL(CMISSRP) :: InitialStretch=1.0_CMISSRP   ! previous value in new mechanical description: 1.2_CMISSRP
   
-  INTEGER(CMISSIntg) :: ElasticityLoopMaximumNumberOfIterations = 5 ! ### Something we dont have to tell about.
-  INTEGER(CMISSIntg) :: NewtonMaximumNumberOfIterations = 500 ! ### Something we dont have to tell about.
-  REAL(CMISSRP) :: NewtonTolerance = 1.E-8_CMISSRP ! ### Something we dont have to tell about.
-  REAL(CMISSRP) :: DAERelativeTolerance = 1.E-7_CMISSRP, DAEAbsoluteTolerance = 1.E-7_CMISSRP! ### Something we dont have to tell about.
+  INTEGER(CMISSIntg) :: ElasticityLoopMaximumNumberOfIterations = 5     ! only relevant if InitialStretch /= 1.0
+  INTEGER(CMISSIntg) :: NewtonMaximumNumberOfIterations = 500           ! 
+  REAL(CMISSRP) :: NewtonTolerance = 1.E-8_CMISSRP                      ! 
+  REAL(CMISSRP) :: DAERelativeTolerance = 1.E-7_CMISSRP, DAEAbsoluteTolerance = 1.E-7_CMISSRP   ! ### Something we dont have to tell about.
 
   !--------------------------------------------------------------------------------------------------------------------------------
 
   ! ### PAPERBRANCH SETTING DESCRIPTION:
-  ! we have 36 fibers spread over 2X2X2 FEM elements. Each fiber has 32 nodes (cells). The 16nth cell is stimulated (counting from 1 to 32):
-  INTEGER(CMISSIntg) :: NumberGlobalXElements ! = 2? ! ### PAPERBRANCH SETTING, set later!
-  INTEGER(CMISSIntg) :: NumberGlobalYElements ! = 2? ! ### PAPERBRANCH SETTING, set later!
-  INTEGER(CMISSIntg) :: NumberGlobalZElements ! = 2? ! ### PAPERBRANCH SETTING, set later!
-  INTEGER(CMISSIntg) :: NumberOfInSeriesFibres = 1 ! ### TO BE DISCUSSED? Only Benni will need this. Default 1 makes sense.  
-  INTEGER(CMISSIntg) :: NumberOfNodesInXi1 = 16 ! ### PAPERBRANCH SETTING     ! TO BE DISCUSSED    (which cell is stimulated? No. 8 or 9 (of 1 to 16)?)
-  INTEGER(CMISSIntg) :: NumberOfNodesInXi2 = 1!3 ! ### PAPERBRANCH SETTING
-  INTEGER(CMISSIntg) :: NumberOfNodesInXi3 = 1!3 ! ### PAPERBRANCH SETTING
+  ! we have 36 fibers spread over 2X2X2 FEM elements. Each fiber has 32 elements, 33 nodes (cells). The 16nth cell is stimulated (counting from 1 to 32):
+  INTEGER(CMISSIntg) :: NumberGlobalXElements      ! ### PAPERBRANCH SETTING, set later!
+  INTEGER(CMISSIntg) :: NumberGlobalYElements      ! ### PAPERBRANCH SETTING, set later!
+  INTEGER(CMISSIntg) :: NumberGlobalZElements      ! ### PAPERBRANCH SETTING, set later!
+  INTEGER(CMISSIntg) :: NumberOfInSeriesFibres = 1 ! ### has no good effect. (set /=1 to break code) TO BE DISCUSSED? Only Benni will need this. Default 1 makes sense.
+  INTEGER(CMISSIntg) :: NumberOfNodesInXi1 = 16    ! ### PAPERBRANCH SETTING, number of 1D elements per 3D element, i.e. number of nodes is +1 (but nodes on edges of 3d elements are shared)
+  INTEGER(CMISSIntg) :: NumberOfNodesInXi2 = 3     ! ### PAPERBRANCH SETTING
+  INTEGER(CMISSIntg) :: NumberOfNodesInXi3 = 3     ! ### PAPERBRANCH SETTING
     
   INTEGER(CMISSLIntg) :: NumberOfElementsFE
   INTEGER(CMISSIntg) :: NumberOfNodesM
@@ -614,7 +613,11 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   !Solve the problem
 
   !Solve the problem -- bring to new length before applying the stimulus
-  IF (ComputationalNodeNumber == 0) PRINT *, "1.) Pre-stretch simulation, initial stretch =", InitialStretch
+  IF (InitialStretch == 1.0_CMISSRP) THEN
+    IF (ComputationalNodeNumber == 0) PRINT *, "1.) Pre-stretch disabled, initial stretch =", InitialStretch
+  ELSE
+    IF (ComputationalNodeNumber == 0) PRINT *, "1.) Pre-stretch simulation, initial stretch =", InitialStretch
+  ENDIF
   Temp = GetMemoryConsumption()
   CALL cmfe_CustomSolverInfoReset(Err)
   IF (DEBUGGING_PARALLEL_BARRIER) CALL gdbParallelDebuggingBarrier()
@@ -622,9 +625,11 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   ! store duration
   CALL ETIME(DurationSystemUser, DurationTotal)
   TimeInitFinshed = DurationSystemUser(2)
-
-  ! CALL cmfe_Problem_Solve(Problem,Err) ! ### PAPER SETTING ! not necessary
-
+  
+  IF (InitialStretch /= 1.0_CMISSRP) THEN
+    CALL cmfe_Problem_Solve(Problem,Err) ! ### PAPER SETTING: not necessary
+  ENDIF
+    
   ! store duration
   CALL ETIME(DurationSystemUser, DurationTotal)
   TimeStretchSimFinished = DurationSystemUser(2)
@@ -697,8 +702,8 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
         & "Aliev_Panfilov/I_HH",StimComponent,Err)
     ENDIF
 
-  !  VALUE = VALUE-ABS(Vmax)/20.0_CMISSRP*STIM_STOP
-  !!  VALUE = VALUE+ABS(Vmax)/10.0_CMISSRP*STIM_STOP
+  !  VALUE = VALUE-ABS(Vmax)/20.0_CMISSRP*StimDuration
+  !!  VALUE = VALUE+ABS(Vmax)/10.0_CMISSRP*StimDuration
   !  CALL cmfe_ControlLoop_BoundaryConditionUpdate(ControlLoopFE,1,1,VALUE,Err)
   !  DO NodeIdx=1,SIZE(LeftSurfaceNodes,1)
   !    NodeNumber=LeftSurfaceNodes(NodeIdx)
@@ -717,8 +722,8 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
 
     !-------------------------------------------------------------------------------------------------------------------------------
     !Solve the problem for the stimulation time
-    IF (ComputationalNodeNumber == 0) Print*, "  Solve with stimulation,    time span: ", time, " to ",time+STIM_STOP
-    CALL cmfe_ControlLoop_TimesSet(ControlLoopMain,time,time+STIM_STOP,ElasticityTimeStep,Err)
+    IF (ComputationalNodeNumber == 0) Print*, "  Solve with stimulation,    time span: ", time, " to ",time+StimDuration
+    CALL cmfe_ControlLoop_TimesSet(ControlLoopMain,time,time+StimDuration,ElasticityTimeStep,Err)
 
     CALL cmfe_CustomSolverInfoReset(Err)
     CALL cmfe_CustomProfilingStop("level 0: stimulation handling",Err)
@@ -737,8 +742,8 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
     
     !-------------------------------------------------------------------------------------------------------------------------------
     !Solve the problem for the rest of the period
-    IF (ComputationalNodeNumber == 0) PRINT*, "  Solve without stimulation, time span: ", time+STIM_STOP, " to ",time+PERIODD
-    CALL cmfe_ControlLoop_TimesSet(ControlLoopMain,time+STIM_STOP,time+PERIODD,ElasticityTimeStep,Err)
+    IF (ComputationalNodeNumber == 0) PRINT*, "  Solve without stimulation, time span: ", time+StimDuration, " to ",time+StimPeriod
+    CALL cmfe_ControlLoop_TimesSet(ControlLoopMain,time+StimDuration,time+StimPeriod,ElasticityTimeStep,Err)
 
     CALL cmfe_CustomSolverInfoReset(Err)    
     CALL cmfe_CustomProfilingStop("level 0: stimulation handling",Err)
@@ -746,9 +751,9 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
     CALL cmfe_Problem_Solve(Problem,Err)
     
     CALL cmfe_CustomProfilingStart("level 0: stimulation handling",Err)
-    CALL HandleSolverInfo(time+STIM_STOP)
+    CALL HandleSolverInfo(time+StimDuration)
     !-------------------------------------------------------------------------------------------------------------------------------
-    time = time + PERIODD
+    time = time + StimPeriod
     k = k+1
 
     IF (k == 2) THEN
@@ -1064,6 +1069,10 @@ SUBROUTINE ParseAssignment(Line, LineNumber, ScenarioInputFile)
       READ(StrValue, *, IOSTAT=Stat) ElasticityTimeStep
     CASE ("stimvalue")
       READ(StrValue, *, IOSTAT=Stat) StimValue
+    CASE ("stimduration", "stimstop")
+      READ(StrValue, *, IOSTAT=Stat) StimDuration
+    CASE ("stimperiod", "periodd")
+      READ(StrValue, *, IOSTAT=Stat) StimPeriod
     CASE ("outputtimestepstride")
       READ(StrValue, *, IOSTAT=Stat) OutputTimeStepStride
     CASE ("xi1", "numberofnodesinxi1")
@@ -1295,9 +1304,6 @@ SUBROUTINE ParseParameters()
   ! compute number of bioelectric nodes that will be stimulated
   NumberStimulatedNodesPerFibre = MAX(1, NINT(DBLE(PhysicalStimulationLength) * (NumberOfElementsMPerFibre / PhysicalWidth)))
   
-  PRINT *, "Number of total nodes per fibre: ", NumberOfElementsMPerFibre
-  PRINT *, "Number of Nodes which are stimulated per fibre: ", NumberStimulatedNodesPerFibre
-  
   ! previous implementation changed:: StimValuePerNode = StimValue / NumberStimulatedNodesPerFibre to::
   StimValuePerNode = StimValue
   ! ^ This was done because we need to keep the stimulation in a cell constant, no matter, how many cells there are. the dynamic of a cell is independent of the spacial discretization. Checked by Nehzat, Thomas, Aaron
@@ -1402,8 +1408,8 @@ SUBROUTINE ParseParameters()
     PRINT *, "---------- Timing parameters -----------------------------------------------"
     PRINT *, "The time unit is 1 ms."
     PRINT "(A,F7.2,A,F5.2,A,F5.2)", "  Main loop, Δt = ", TimeStop, ", dt = ", ElasticityTimeStep
-    PRINT "(A,F5.2)", "  - stimulation enabled:  Δt = ", STIM_STOP
-    PRINT "(A,F5.2)", "  - stimulation disabled: Δt = ", (PERIODD - STIM_STOP)
+    PRINT "(A,F5.2)", "  - stimulation enabled:  Δt = ", StimDuration
+    PRINT "(A,F5.2)", "  - stimulation disabled: Δt = ", (StimPeriod - StimDuration)
     PRINT *, ""
 
     PRINT "(A,F7.2,A,F0.5,A,I5)", "- MAIN_TIME_LOOP,         Δt =", TimeStop, ", dt = ", ElasticityTimeStep, &
@@ -1422,7 +1428,7 @@ SUBROUTINE ParseParameters()
     IF (DebuggingOnlyRunShortPartOfSimulation) PRINT *, "Abort after first stimulation."
     PRINT *, "OutputTimeStepStride:", OutputTimeStepStride, ", EnableExportEMG:", EnableExportEMG
 
-    ! It should be ElasticityTimeStep = STIM_STOP
+    ! ElasticityTimeStep should be a integer multiple of StimDuration
 
     ! Output problem size information
     PRINT *, ""
@@ -1461,10 +1467,15 @@ SUBROUTINE ParseParameters()
     PRINT *, "---------- Physical parameters -----------------------------------------------"
     PRINT "(4(A,F5.2))", "       Dimensions [cm]: ",PhysicalLength,"x",PhysicalWidth,"x",PhysicalHeight,&
      & ",          InitialStretch: ", InitialStretch
-    PRINT "(A,F11.2,A,F5.2,A,I3,A,F9.2,A)", " Stimulation [uA/cm^2]: ",StimValue," on ",PhysicalStimulationLength," cm, i.e. ",&
-      & NumberStimulatedNodesPerFibre," nodes, ",StimValuePerNode, " per node"
-    PRINT "(3(A,F5.2))", " PMax:", PMax, ",      VMax: ", VMax, ", Conductivity: ", Conductivity
-    PRINT "(3(A,F5.2))", "   Am:", Am, ", Cm (fast):", CmFast, ",     Cm (slow):", CmSlow
+    IF (NumberStimulatedNodesPerFibre == 1) THEN
+      PRINT "(A,F11.2,A,F8.5,A,I3,A,F9.2,A)", " Stimulation [uA/cm^2]: ",StimValue," on ",PhysicalStimulationLength," cm, i.e. ",&
+        & NumberStimulatedNodesPerFibre," node"
+    ELSE
+      PRINT "(A,F11.2,A,F8.5,A,I3,A,F9.2,A)", " Stimulation [uA/cm^2]: ",StimValue," on ",PhysicalStimulationLength," cm, i.e. ",&
+        & NumberStimulatedNodesPerFibre," nodes, ",StimValuePerNode, " per node"
+    ENDIF
+    PRINT "(3(A,F5.2))", " PMax:", PMax, ",        VMax: ", VMax, ",   Conductivity: ", Conductivity
+    PRINT "(3(A,F7.2))", "   Am:", Am, ", Cm (fast):", CmFast, ",     Cm (slow):", CmSlow
     
     IF (ModelType == 0) THEN    ! 3a, "MultiPhysStrain", old tomo mechanics
       PRINT *, "ModelType: 0 (""3a"", MultiPhysStrain, Old mechanics formulation that works in parallel.)"
@@ -3401,7 +3412,7 @@ SUBROUTINE CreateControlLoops()
   CALL cmfe_ControlLoop_Initialise(ControlLoopMain,Err)
   CALL cmfe_Problem_ControlLoopGet(Problem,CMFE_CONTROL_LOOP_NODE,ControlLoopMain,Err)
   CALL cmfe_ControlLoop_LabelSet(ControlLoopMain,'MAIN_TIME_LOOP',Err)
-  !Loop in time for STIM_STOP with the Stimulus applied.
+  !Loop in time for StimDuration with the Stimulus applied.
   CALL cmfe_ControlLoop_TimesSet(ControlLoopMain,0.0_CMISSRP,ElasticityTimeStep,ElasticityTimeStep,Err)
 
   CALL cmfe_ControlLoop_TimeOutputSet(ControlLoopMain,OutputTimeStepStride,Err)
@@ -3880,10 +3891,13 @@ END SUBROUTINE ExportEMG
 SUBROUTINE SetStimulationAtNodes(StimValuePerNode)
   REAL(CMISSRP), INTENT(IN) :: StimValuePerNode
   INTEGER(CMISSIntg) :: StimulatedNodeBegin, StimulatedNodeEnd, StimulatedNodeNo
+  LOGICAL :: CurrentFibreFires
   
   NumberFiringFibres = 0
   !loop over all neuromuscular junctions (middle point of the fibres)
   DO FibreNo = 1, NumberOfFibres
+    CurrentFibreFires = .FALSE.
+    
     ! get middle point of fibre
     JunctionNodeNo = (FibreNo-1) * NumberOfNodesPerLongFibre + NumberOfNodesPerLongFibre/2
     
@@ -3918,13 +3932,16 @@ SUBROUTINE SetStimulationAtNodes(StimValuePerNode)
             !PRINT*, "Fibre ",FibreNo,": MU ", MotorUnitRank, " fires, StimulatedNodeNo=",StimulatedNodeNo, &
             !  & ", StimComponent=",StimComponent,", StimValue=", StimValue
 
-            NumberFiringFibres = NumberFiringFibres + 1
+            CurrentFibreFires = .TRUE.
             CALL cmfe_Field_ParameterSetUpdateNode(CellMLParametersField, &
               & CMFE_FIELD_U_VARIABLE_TYPE,CMFE_FIELD_VALUES_SET_TYPE,1,1,StimulatedNodeNo,StimComponent,StimValuePerNode,Err)
           ENDIF
         ENDIF
       ENDIF
     ENDDO
+    
+    ! If there was a stimulated node in the current fibre, increase number of stimulated fibres counter for output
+    IF (CurrentFibreFires) NumberFiringFibres = NumberFiringFibres + 1
   ENDDO
 
 END SUBROUTINE SetStimulationAtNodes
