@@ -8387,8 +8387,8 @@ Stern and Rios Component
 <!--  <variable name="stress" public_interface="out" units="newton_per_m2"/>-->
 <!--  <variable initial_value="0.0" name="dummy" units="newton_millisecond_per_m2"/>-->
 <!--  <variable initial_value="0.000163" name="zeta" units="micrometre"/>-->
-  <variable initial_value="0.000107" name="eta" units="newton_per_m3"/>
-  <variable name="stress" public_interface="out" units="newton_per_m2"/>
+  <variable initial_value="0.000107" name="eta" units="micrometre"/>
+  <variable name="stress" public_interface="out" units="dimensionless"/>
   <variable initial_value="0.0" name="dummy" units="newton_millisecond_per_m2"/>
 <!--  <variable initial_value="0.00725" name="zeta" units="micrometre"/>-->
 <!--  <variable initial_value="0.0151" name="zeta" units="micrometre"/>-->
