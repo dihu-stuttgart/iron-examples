@@ -71,7 +71,7 @@ PROGRAM MONODOMAINEXAMPLE
   !Test program parameters
 
   REAL(CMISSRP), PARAMETER :: WIDTH=1.0_CMISSRP
-  REAL(CMISSRP) :: PhysicalStimulationLength =0.03125_CMISSRP !0.0016_CMISSRP   ! X-direction   ### PAPERBRANCH SETTING: a value small enough, such that ONLY ONE CELL is stimulated. !NMJ area: 200 (um)² -> NMJ diameter: 16 um = 0.0016cm. Based on Tse et al., 2014, The Neuromuscular Junction: Measuring Synapse Size, Fragmentation and Changes in Synaptic Protein Density Using Confocal Fluorescence Microscopy
+  REAL(CMISSRP) :: PhysicalStimulationLength =0.0002_CMISSRP !0.03125_CMISSRP !0.0016_CMISSRP   ! X-direction   ### PAPERBRANCH SETTING: a value small enough, such that ONLY ONE CELL is stimulated. !NMJ area: 200 (um)² -> NMJ diameter: 16 um = 0.0016cm. Based on Tse et al., 2014, The Neuromuscular Junction: Measuring Synapse Size, Fragmentation and Changes in Synaptic Protein Density Using Confocal Fluorescence Microscopy
 
   INTEGER(CMISSIntg), PARAMETER :: CoordinateSystemUserNumber=1
   INTEGER(CMISSIntg), PARAMETER :: RegionUserNumber=2
@@ -141,7 +141,7 @@ PROGRAM MONODOMAINEXAMPLE
   TYPE(cmfe_SolverEquationsType) :: SolverEquations
   
   !Generic CMISS variables
-  
+  INTEGER(CMISSIntg) :: NumberOfStimElemRef
   INTEGER(CMISSIntg) :: NumberOfComputationalNodes,ComputationalNodeNumber
   INTEGER(CMISSIntg) :: EquationsSetIndex,CellMLIndex
   INTEGER(CMISSIntg) :: JunctionNodeIdx,NumberStimulatedNodesPerFibre,StimulatedNodeBegin,StimulatedNodeEnd,StimulationNodeIdx
@@ -219,10 +219,11 @@ PROGRAM MONODOMAINEXAMPLE
     SplittingOrder=adjustl(COMMAND_ARGUMENT)
     WRITE(*, '("Splitting order: ", A)') TRIM(SplittingOrder)
 
-    inquire(file=CellmlFile, exist=fileExist)
+    inquire(file=TRIM(CellmlFile), exist=fileExist)
+    print *,"CellmlFile: ", TRIM(CellmlFile)
     if (.not. fileExist) then
       write(*, '(">>ERROR: File does not exist")')
-      stop
+    !!!  stop
     endif
   ELSE
     !If there are not enough arguments default the problem specification 
@@ -255,6 +256,7 @@ PROGRAM MONODOMAINEXAMPLE
     CellmlFile="slow_TK_2014_12_08.xml"
     !CellmlFile="hodgkin_huxley_1952.cellml"   
     SLOW_TWITCH=.TRUE.
+    SplittingOrder="O2"
   ENDIF
 
   ! determine file name for output files
@@ -400,45 +402,38 @@ PROGRAM MONODOMAINEXAMPLE
     & 500.0_CMISSRP,Err)
   
   IF(CellmlFile .EQ. "hodgkin_huxley_1952.cellml") THEN
+  
     IF(SLOW_TWITCH) THEN
       !Set Cm, slow-twitch
       CALL cmfe_Field_ComponentValuesInitialise(MaterialsField,CMFE_FIELD_U_VARIABLE_TYPE,CMFE_FIELD_VALUES_SET_TYPE,2, &
       & 0.58_CMISSRP,Err)
-
-      IF(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE > 8) THEN
-          STIM_VALUE=(225.0_CMISSRP/8.0_CMISSRP)*(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE)
-      ELSE
-          STIM_VALUE=225.0_CMISSRP
-      ENDIF
+      NumberOfStimElemRef=10
     ELSE  
       CALL cmfe_Field_ComponentValuesInitialise(MaterialsField,CMFE_FIELD_U_VARIABLE_TYPE,CMFE_FIELD_VALUES_SET_TYPE,2, &
       & 1.0_CMISSRP,Err)
-      IF(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE > 16) THEN
-        STIM_VALUE=(375.0_CMISSRP/16.0_CMISSRP)*(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE)
-      ELSE
-        STIM_VALUE=375.0_CMISSRP
-      ENDIF
-    ENDIF    
+      NumberOfStimElemRef=16      
+    ENDIF 
+    
+    !!!STIM_VALUE=1200.0_CMISSRP
+        STIM_VALUE=75.0_CMISSRP*Max(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef,1.0_CMISSRP) &
+                    *MAX(0.5_CMISSRP/STIM_STOP,1.0_CMISSRP)
+    
   ELSEIF(CellmlFile .EQ. "slow_TK_2014_12_08.xml") THEN
+  
     IF(SLOW_TWITCH) THEN
       !Set Cm, slow-twitch
       CALL cmfe_Field_ComponentValuesInitialise(MaterialsField,CMFE_FIELD_U_VARIABLE_TYPE,CMFE_FIELD_VALUES_SET_TYPE,2, &
       & 0.58_CMISSRP,Err)
-      !!!IF(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE > 10) THEN
-      !!!    STIM_VALUE=(375.0_CMISSRP/10.0_CMISSRP)*(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE)
-      !!!ELSE
-      !!!    STIM_VALUE=375.0_CMISSRP
-      !!!ENDIF
-      STIM_VALUE=1200.0_CMISSRP
+      NumberOfStimElemRef=10
     ELSE  
       CALL cmfe_Field_ComponentValuesInitialise(MaterialsField,CMFE_FIELD_U_VARIABLE_TYPE,CMFE_FIELD_VALUES_SET_TYPE,2, &
-      & 1.0_CMISSRP,Err)
-      IF(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE > 12) THEN
-        STIM_VALUE=(375.0_CMISSRP/12.0_CMISSRP)*(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE)
-      ELSE
-        STIM_VALUE=375.0_CMISSRP
-      ENDIF
+      & 1.0_CMISSRP,Err) 
+      NumberOfStimElemRef=12
     ENDIF
+    
+    !!!STIM_VALUE=1200.0_CMISSRP
+    STIM_VALUE=79.974_CMISSRP*Max(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef,1.0_CMISSRP) &
+                    *MAX(0.5_CMISSRP/STIM_STOP,1.0_CMISSRP)   
   ENDIF
   
   !Set conductivity
@@ -561,15 +556,15 @@ PROGRAM MONODOMAINEXAMPLE
   !---------------------------------------------------------------------------------------------------------------------------------
   NumberStimulatedNodesPerFibre = MAX(1, NINT(DBLE(PhysicalStimulationLength) * &
                                                  &((NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE+1) / WIDTH)))
-  !PRINT *, "Number of Nodes which are stimulated per fibre: ", NumberStimulatedNodesPerFibre
+  PRINT *, "Number of Nodes which are stimulated per fibre: ", NumberStimulatedNodesPerFibre
   
   ! get middle point of fibre
   JunctionNodeIdx = INT(CEILING(DBLE(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE+1)/2))
-  !PRINT *, "JunctionNodeIdx: ", JunctionNodeIdx
+  PRINT *, "JunctionNodeIdx: ", JunctionNodeIdx
   
   ! compute first node for stimulation
   StimulatedNodeBegin = JunctionNodeIdx - NumberStimulatedNodesPerFibre/2
-  !PRINT *, "StimulatedNodeBegin: ", StimulatedNodeBegin
+  PRINT *, "StimulatedNodeBegin: ", StimulatedNodeBegin
   !compute first node for stimulation
   StimulatedNodeEnd = StimulatedNodeBegin + NumberStimulatedNodesPerFibre-1
   !PRINT *, "StimulatedNodeEnd: ", StimulatedNodeEnd
