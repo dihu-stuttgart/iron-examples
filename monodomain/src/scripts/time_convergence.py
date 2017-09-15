@@ -137,6 +137,7 @@ def makeplot_TimeConv_err(x,y,labels):
 ###############################################################################
 #Vm=[0.0 for i in range(1)]
 
+#x,Vm,timesteps=get_data_TimeConv(time,1)
 x,Vm,timesteps=get_data_TimeConv(time,2)
 makeplot_TimeConv(x,Vm,timesteps)
 

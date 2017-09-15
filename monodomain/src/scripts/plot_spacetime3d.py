@@ -21,22 +21,29 @@ print "foldername: ", foldername
 imagename="{}".format(foldername)+"image.png"
 
 # get all exnode files (sorted) from the folder
-files = exnode_reader.get_exnode_files(foldername)
+ls = exnode_reader.get_exnode_files(foldername)
+condition_file= lambda name: "Time" in name
+ls_selected=list(np.extract(map(condition_file,ls),ls))
+files=ls_selected
+#files=sorted(ls_selected)
 #print 'exnode files',files
 
-n_timestep=len(files)-1
-#print "No. of time steps: ", n_timestep
+n_part=4 #No. of cores
+n_files=len(files)
+print "n_files: ", n_files
+n_timestep=n_files/n_part
+print "No. of time steps: ", n_timestep
 
 #get the number of data in each file
 x=exnode_reader.parse_file(foldername+files[0],[["Coordinate",1]]) #field_name and component_no
 n_data=len(x)
-#print "No. of data point: ",n_data
+print "No. of data point: ",n_data
 #print x 
 
 # get the data
 Vm=[0.0 for i in range(n_timestep)]
 for i_time in range (n_timestep):
-    Vm[i_time]=exnode_reader.parse_file(foldername+files[i_time+1],[["Vm",1]])
+    Vm[i_time]=exnode_reader.parse_file(foldername+files[i_time*n_part+1],[["Vm",1]])
     #print "time step: ", i_time
     #print Vm[i_time]  
 #print "Vm: ",Vm
@@ -58,7 +65,8 @@ def makeplot(x,y,z):
     fig=plt.figure(1)
     ax1=fig.gca(projection='3d')
     plt.tight_layout()
-    ax1.plot_surface(X,Y,Z,cmap=cm.coolwarm, linewidth=1,rstride=1,cstride=1)
+    ax1.plot_surface(X,Y,Z,cmap=cm.coolwarm, linewidth=0,rstride=1,cstride=128)
+    #ax1.gridlines.set_visible(False)
     ax1.set_zlim(-80,50)
     plt.title("Vm")
     plt.show()    
@@ -74,6 +82,9 @@ for j in range(j_e):
 time_step=float("0."+foldername[j_s:j_e])
 print "time_step",time_step
 time=np.arange(n_timestep)*time_step
+end_time=10.0
+time=time*end_time/time[n_timestep-1]
+print "time: ",time
 makeplot(time,x,Vm)
 
 
