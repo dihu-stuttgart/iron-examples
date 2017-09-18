@@ -71,7 +71,7 @@ PROGRAM MONODOMAINEXAMPLE
   !Test program parameters
 
   REAL(CMISSRP), PARAMETER :: WIDTH=1.0_CMISSRP
-  REAL(CMISSRP) :: PhysicalStimulationLength =0.0002_CMISSRP !0.03125_CMISSRP !0.0016_CMISSRP   ! X-direction   ### PAPERBRANCH SETTING: a value small enough, such that ONLY ONE CELL is stimulated. !NMJ area: 200 (um)² -> NMJ diameter: 16 um = 0.0016cm. Based on Tse et al., 2014, The Neuromuscular Junction: Measuring Synapse Size, Fragmentation and Changes in Synaptic Protein Density Using Confocal Fluorescence Microscopy
+  REAL(CMISSRP) :: PhysicalStimulationLength =0.03125_CMISSRP !0.0002_CMISSRP !0.03125_CMISSRP !0.0016_CMISSRP   ! X-direction   ### PAPERBRANCH SETTING: a value small enough, such that ONLY ONE CELL is stimulated. !NMJ area: 200 (um)² -> NMJ diameter: 16 um = 0.0016cm. Based on Tse et al., 2014, The Neuromuscular Junction: Measuring Synapse Size, Fragmentation and Changes in Synaptic Protein Density Using Confocal Fluorescence Microscopy
 
   INTEGER(CMISSIntg), PARAMETER :: CoordinateSystemUserNumber=1
   INTEGER(CMISSIntg), PARAMETER :: RegionUserNumber=2
@@ -253,7 +253,8 @@ PROGRAM MONODOMAINEXAMPLE
     
     TIME_STOP=10.00
     OUTPUT_FREQUENCY=1
-    CellmlFile="slow_TK_2014_12_08.xml"
+    CellmlFile="new_slow_TK_2014_12_08.cellml"
+    !CellmlFile="slow_TK_2014_12_08.xml"
     !CellmlFile="hodgkin_huxley_1952.cellml"   
     SLOW_TWITCH=.TRUE.
     SplittingOrder="O2"
@@ -414,11 +415,11 @@ PROGRAM MONODOMAINEXAMPLE
       NumberOfStimElemRef=16      
     ENDIF 
     
-    !!!STIM_VALUE=1200.0_CMISSRP
-        STIM_VALUE=75.0_CMISSRP*Max(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef,1.0_CMISSRP) &
-                    *MAX(0.5_CMISSRP/STIM_STOP,1.0_CMISSRP)
+    STIM_VALUE=1200.0_CMISSRP
+    !!!STIM_VALUE=75.0_CMISSRP*Max(REAL(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef),1.0_CMISSRP) &
+    !!!&             *MAX(0.5_CMISSRP/STIM_STOP,1.0_CMISSRP)
     
-  ELSEIF(CellmlFile .EQ. "slow_TK_2014_12_08.xml") THEN
+  ELSEIF(CellmlFile .EQ. "slow_TK_2014_12_08.xml" .OR. CellmlFile .EQ. "new_slow_TK_2014_12_08.cellml") THEN
   
     IF(SLOW_TWITCH) THEN
       !Set Cm, slow-twitch
@@ -431,9 +432,14 @@ PROGRAM MONODOMAINEXAMPLE
       NumberOfStimElemRef=12
     ENDIF
     
-    !!!STIM_VALUE=1200.0_CMISSRP
-    STIM_VALUE=79.974_CMISSRP*Max(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef,1.0_CMISSRP) &
-                    *MAX(0.5_CMISSRP/STIM_STOP,1.0_CMISSRP)   
+    STIM_VALUE=1200.0_CMISSRP
+    !!!IF(CellmlFile .EQ. "slow_TK_2014_12_08.xml") THEN
+    !!!STIM_VALUE=82.265_CMISSRP*Max(REAL(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef),1.0_CMISSRP) &
+    !!!&                *MAX(0.5_CMISSRP/STIM_STOP,1.0_CMISSRP)
+    !!!ELSEIF(CellmlFile .EQ. "new_slow_TK_2014_12_08.cellml") THEN
+    !!!STIM_VALUE=79.974_CMISSRP*Max(REAL(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef),1.0_CMISSRP) &
+    !!!&                *MAX(0.5_CMISSRP/STIM_STOP,1.0_CMISSRP)
+    !!!ENDIF
   ENDIF
   
   !Set conductivity
@@ -451,7 +457,7 @@ PROGRAM MONODOMAINEXAMPLE
   IF(CellmlFile .EQ. "hodgkin_huxley_1952.cellml") THEN
     CALL cmfe_CellML_VariableSetAsKnown(CellML,CellMLModelIndex,"membrane/i_Stim ",Err)
     CALL cmfe_CellML_VariableSetAsWanted(CellML,CellMLModelIndex,"membrane/i_Na",Err)
-  ELSEIF(CellmlFile .EQ. "slow_TK_2014_12_08.xml") THEN
+  ELSEIF(CellmlFile .EQ. "slow_TK_2014_12_08.xml".OR. CellmlFile .EQ. "new_slow_TK_2014_12_08.cellml") THEN
     CALL cmfe_CellML_VariableSetAsKnown(CellML,CellMLModelIndex,"wal_environment/I_HH",Err)
     CALL cmfe_CellML_VariableSetAsWanted(CellML,CellMLModelIndex,"wal_environment/I_Na",Err)
   ENDIF
@@ -482,7 +488,7 @@ PROGRAM MONODOMAINEXAMPLE
       & CellMLModelIndex,"membrane/V",CMFE_FIELD_VALUES_SET_TYPE,Err)
     CALL cmfe_CellML_CreateCellMLToFieldMap(CellML,CellMLModelIndex,"membrane/V",CMFE_FIELD_VALUES_SET_TYPE, &
       & DependentField,CMFE_FIELD_U_VARIABLE_TYPE,1,CMFE_FIELD_VALUES_SET_TYPE,Err)
-  ELSEIF(CellmlFile .EQ. "slow_TK_2014_12_08.xml") THEN
+  ELSEIF(CellmlFile .EQ. "slow_TK_2014_12_08.xml".OR. CellmlFile .EQ. "new_slow_TK_2014_12_08.cellml") THEN
     CALL cmfe_CellML_CreateFieldToCellMLMap(CellML,DependentField,CMFE_FIELD_U_VARIABLE_TYPE,1,CMFE_FIELD_VALUES_SET_TYPE, &
       & CellMLModelIndex,"wal_environment/vS",CMFE_FIELD_VALUES_SET_TYPE,Err)
     CALL cmfe_CellML_CreateCellMLToFieldMap(CellML,CellMLModelIndex,"wal_environment/vS",CMFE_FIELD_VALUES_SET_TYPE, &
@@ -497,6 +503,9 @@ PROGRAM MONODOMAINEXAMPLE
     CALL cmfe_Field_ComponentValuesInitialise(DependentField,CMFE_FIELD_U_VARIABLE_TYPE,CMFE_FIELD_VALUES_SET_TYPE,1, &
       & -75.0_CMISSRP,Err)
   ELSEIF(CellmlFile .EQ. "slow_TK_2014_12_08.xml") THEN
+    CALL cmfe_Field_ComponentValuesInitialise(DependentField,CMFE_FIELD_U_VARIABLE_TYPE,CMFE_FIELD_VALUES_SET_TYPE,1, &
+      & -82.265_CMISSRP,Err)
+  ELSEIF(CellmlFile .EQ. "new_slow_TK_2014_12_08.cellml") THEN
     CALL cmfe_Field_ComponentValuesInitialise(DependentField,CMFE_FIELD_U_VARIABLE_TYPE,CMFE_FIELD_VALUES_SET_TYPE,1, &
       & -79.974_CMISSRP,Err)
   ENDIF
@@ -547,7 +556,7 @@ PROGRAM MONODOMAINEXAMPLE
   
   IF(CellmlFile .EQ. "hodgkin_huxley_1952.cellml") THEN
     CALL cmfe_CellML_FieldComponentGet(CellML,CellMLModelIndex,CMFE_CELLML_PARAMETERS_FIELD,"membrane/i_Stim",StimComponent,Err)
-  ELSEIF(CellmlFile .EQ. "slow_TK_2014_12_08.xml") THEN
+  ELSEIF(CellmlFile .EQ. "slow_TK_2014_12_08.xml".OR. CellmlFile .EQ. "new_slow_TK_2014_12_08.cellml") THEN
     CALL cmfe_CellML_FieldComponentGet(CellML,CellMLModelIndex,CMFE_CELLML_PARAMETERS_FIELD,"wal_environment/I_HH", &
       & StimComponent,Err)
   ENDIF
@@ -673,7 +682,15 @@ PROGRAM MONODOMAINEXAMPLE
   !!! The third solver is created here(!)
   !Finish the creation of the problem solver
   CALL cmfe_Problem_SolversCreateFinish(Problem,Err)
-
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !Set the time step for the second DAE solver
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !Get the second (DAE) solver
+  CALL cmfe_Solver_Initialise(Solver,Err)
+  CALL cmfe_Problem_SolverGet(Problem,CMFE_CONTROL_LOOP_NODE,3,Solver,Err)
+  !Set the DAE time step
+  CALL cmfe_Solver_DAETimeStepSet(Solver,ODE_TIME_STEP,Err) 
+  !---------------------------------------------------------------------------------------------------------------------------------
 ! TODO: this was copied from laplace example
 !  IF(SOLVER_TYPE==0) THEN
 !    CALL cmfe_Solver_LinearTypeSet(Solver,CMFE_SOLVER_LINEAR_DIRECT_SOLVE_TYPE,Err)
@@ -688,7 +705,7 @@ PROGRAM MONODOMAINEXAMPLE
   !Start the creation of the problem solver CellML equations
   !---------------------------------------------------------------------------------------------------------------------------------
   CALL cmfe_Problem_CellMLEquationsCreateStart(Problem,Err)
-  !Get the first solver  
+  !Get the first DAE solver  
   !Get the CellML equations
   CALL cmfe_Solver_Initialise(Solver,Err)
   CALL cmfe_Problem_SolverGet(Problem,CMFE_CONTROL_LOOP_NODE,1,Solver,Err)
@@ -698,7 +715,7 @@ PROGRAM MONODOMAINEXAMPLE
   CALL cmfe_CellMLEquations_CellMLAdd(CellMLEquations,CellML,CellMLIndex,Err)
   !---------------------------------------------------------------------------------------------------------------------------------
   IF(SplittingOrder .EQ. "O2") THEN
-    !Get the first solver  
+    !Get the second DAE solver  
     CALL cmfe_Solver_Initialise(Solver,Err)
     CALL cmfe_Problem_SolverGet(Problem,CMFE_CONTROL_LOOP_NODE,3,Solver,Err)
     !Get the CellML equations
