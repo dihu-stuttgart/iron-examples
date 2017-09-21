@@ -144,7 +144,7 @@ PROGRAM MONODOMAINEXAMPLE
   INTEGER(CMISSIntg) :: NumberOfStimElemRef
   INTEGER(CMISSIntg) :: NumberOfComputationalNodes,ComputationalNodeNumber
   INTEGER(CMISSIntg) :: EquationsSetIndex,CellMLIndex
-  INTEGER(CMISSIntg) :: JunctionNodeIdx,NumberStimulatedNodesPerFibre,StimulatedNodeBegin,StimulatedNodeEnd,StimulationNodeIdx
+  INTEGER(CMISSIntg) :: JunctionNodeIdx,NumberStimulatedNodesRefine,StimulatedNodeBegin,StimulatedNodeEnd,StimulationNodeIdx
   INTEGER(CMISSIntg) :: FirstNodeNumber,LastNodeNumber
   INTEGER(CMISSIntg) :: FirstNodeDomain,LastNodeDomain,NodeDomain
   INTEGER(CMISSIntg) :: Err
@@ -253,8 +253,8 @@ PROGRAM MONODOMAINEXAMPLE
     
     TIME_STOP=10.00
     OUTPUT_FREQUENCY=1
-    CellmlFile="new_slow_TK_2014_12_08.cellml"
-    !CellmlFile="slow_TK_2014_12_08.xml"
+    !CellmlFile="new_slow_TK_2014_12_08.cellml"
+    CellmlFile="slow_TK_2014_12_08.xml"
     !CellmlFile="hodgkin_huxley_1952.cellml"   
     SLOW_TWITCH=.TRUE.
     SplittingOrder="O2"
@@ -408,15 +408,15 @@ PROGRAM MONODOMAINEXAMPLE
       !Set Cm, slow-twitch
       CALL cmfe_Field_ComponentValuesInitialise(MaterialsField,CMFE_FIELD_U_VARIABLE_TYPE,CMFE_FIELD_VALUES_SET_TYPE,2, &
       & 0.58_CMISSRP,Err)
-      NumberOfStimElemRef=10
+      !NumberOfStimElemRef=10
     ELSE  
       CALL cmfe_Field_ComponentValuesInitialise(MaterialsField,CMFE_FIELD_U_VARIABLE_TYPE,CMFE_FIELD_VALUES_SET_TYPE,2, &
       & 1.0_CMISSRP,Err)
-      NumberOfStimElemRef=16      
+      !NumberOfStimElemRef=16      
     ENDIF 
     
     STIM_VALUE=1200.0_CMISSRP
-    !!!STIM_VALUE=75.0_CMISSRP*Max(REAL(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef),1.0_CMISSRP) &
+    !!!STIM_VALUE=75.0_CMISSRP*Max(DBLE(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef),1.0_CMISSRP) &
     !!!&             *MAX(0.5_CMISSRP/STIM_STOP,1.0_CMISSRP)
     
   ELSEIF(CellmlFile .EQ. "slow_TK_2014_12_08.xml" .OR. CellmlFile .EQ. "new_slow_TK_2014_12_08.cellml") THEN
@@ -434,10 +434,10 @@ PROGRAM MONODOMAINEXAMPLE
     
     STIM_VALUE=1200.0_CMISSRP
     !!!IF(CellmlFile .EQ. "slow_TK_2014_12_08.xml") THEN
-    !!!STIM_VALUE=82.265_CMISSRP*Max(REAL(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef),1.0_CMISSRP) &
+    !!!STIM_VALUE=82.265_CMISSRP*Max(DBLE(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef),1.0_CMISSRP) &
     !!!&                *MAX(0.5_CMISSRP/STIM_STOP,1.0_CMISSRP)
     !!!ELSEIF(CellmlFile .EQ. "new_slow_TK_2014_12_08.cellml") THEN
-    !!!STIM_VALUE=79.974_CMISSRP*Max(REAL(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef),1.0_CMISSRP) &
+    !!!STIM_VALUE=79.974_CMISSRP*Max(DBLE(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE/NumberOfStimElemRef),1.0_CMISSRP) &
     !!!&                *MAX(0.5_CMISSRP/STIM_STOP,1.0_CMISSRP)
     !!!ENDIF
   ENDIF
@@ -563,20 +563,20 @@ PROGRAM MONODOMAINEXAMPLE
   !---------------------------------------------------------------------------------------------------------------------------------
   ! compute number of bioelectric nodes that will be stimulated
   !---------------------------------------------------------------------------------------------------------------------------------
-  NumberStimulatedNodesPerFibre = MAX(1, NINT(DBLE(PhysicalStimulationLength) * &
+  NumberStimulatedNodesRefine = MAX(1, NINT(DBLE(PhysicalStimulationLength) * &
                                                  &((NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE+1) / WIDTH)))
-  PRINT *, "Number of Nodes which are stimulated per fibre: ", NumberStimulatedNodesPerFibre
+  PRINT *, "Number of Nodes for refinement around the middle point: ", NumberStimulatedNodesRefine
   
   ! get middle point of fibre
   JunctionNodeIdx = INT(CEILING(DBLE(NUMBER_GLOBAL_X_ELEMENTS*INTERPOLATION_TYPE+1)/2))
   PRINT *, "JunctionNodeIdx: ", JunctionNodeIdx
   
   ! compute first node for stimulation
-  StimulatedNodeBegin = JunctionNodeIdx - NumberStimulatedNodesPerFibre/2
-  PRINT *, "StimulatedNodeBegin: ", StimulatedNodeBegin
-  !compute first node for stimulation
-  StimulatedNodeEnd = StimulatedNodeBegin + NumberStimulatedNodesPerFibre-1
-  !PRINT *, "StimulatedNodeEnd: ", StimulatedNodeEnd
+  StimulatedNodeBegin = JunctionNodeIdx - NumberStimulatedNodesRefine+1
+  PRINT *, "StimulationNodeBegin: ", StimulatedNodeBegin
+  !compute last node for stimulation
+  StimulatedNodeEnd = JunctionNodeIdx + NumberStimulatedNodesRefine-1
+  PRINT *, "StimulatedNodeEnd: ", StimulatedNodeEnd
 
   ! loop over nodes of the fibre to be stimulated
   DO StimulationNodeIdx = StimulatedNodeBegin, StimulatedNodeEnd 

@@ -16,6 +16,10 @@ folder="../../results/current_run/"
 if len(sys.argv) >1:
    gridsize=sys.argv[1]
    time=float(sys.argv[2])
+   if len(sys.argv)>2:
+    folder=sys.argv[3]
+    if folder[-1] != "/":
+     folder=folder + "/"
 else:
    gridsize=64
    time=3.0
@@ -42,7 +46,7 @@ def get_timestep(foldername):
 def get_data_TimeConv(time,order):
 
   global folder
-   
+  #print "folder: ",folder  
   ls = os.listdir(folder)
   condition_folder= lambda name: "l1x1" in name and gridsize in name and "O"+str(order) in name
   ls_selected=list(np.extract(map(condition_folder,ls),ls))
@@ -62,8 +66,8 @@ def get_data_TimeConv(time,order):
     #print "i: ",i
     #print"subfolders: ", subfolders[i]
     timesteps[i]=get_timestep(subfolders[i])
-    Indx=int(time/timesteps[i])
-    #print Indx
+    Indx=int(round(time/timesteps[i]))
+    print "Indx, time", Indx, Indx*timesteps[i]
     fileToread = folder+subfolders[i]+"/"+"Time_2_"+str(Indx)+".part0.exnode" #serial version
     #print 'file',fileToread
 
@@ -98,7 +102,7 @@ def find_err_L2_rel(Vm):
   Vm_L2=LA.norm(Vm[0],2)
   #print Vm_L2
   for i in range(1,num_runs):
-    #print i
+    #print "i, Vm[i]-Vm[0]", Vm[i]-Vm[0]
     err[i-1]=LA.norm(Vm[i]-Vm[0],2)/Vm_L2
     #print err
   return err
@@ -139,6 +143,8 @@ def makeplot_TimeConv_err(x,y,labels):
 
 #x,Vm,timesteps=get_data_TimeConv(time,1)
 x,Vm,timesteps=get_data_TimeConv(time,2)
+#print "x:", x
+#print "Vm: ", Vm
 makeplot_TimeConv(x,Vm,timesteps)
 
 err_L2=[0.0 for i in range(1)]
