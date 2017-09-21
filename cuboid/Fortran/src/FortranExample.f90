@@ -94,6 +94,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   REAL(CMISSRP), PARAMETER :: STIM_STOP=0.1_CMISSRP!ELASTICITY_TIME_STEP
 
   INTEGER(CMISSIntg), PARAMETER :: OUTPUT_FREQUENCY=10
+  REAL(CMISSRP) :: t1D3D, t3D1D
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -459,7 +460,8 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   IF (ComputationalNodeNumber == 0) PRINT*, "4.) Simulate with stimulation"
   IF (ComputationalNodeNumber == 0) MemoryConsumptionBeforeSim = GetMemoryConsumption()
 
-  CALL cmfe_CustomTimingGet(CustomTimingOdeSolver, CustomTimingParabolicSolver, CustomTimingFESolverBeforeMainSim, Err)
+  CALL cmfe_CustomTimingGet(CustomTimingOdeSolver, CustomTimingParabolicSolver, CustomTimingFESolverBeforeMainSim, t1D3D, t3D1D, &
+    & Err)
   IF (ComputationalNodeNumber == 0) PRINT*, "    Nonliner Solver duration: ", CustomTimingFESolverBeforeMainSim, " s"
   CALL cmfe_CustomTimingReset(Err)
   CALL CPU_Time(TimeMainSimulationStart)
@@ -568,8 +570,9 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   !Finialise CMISS
   CALL cmfe_Finalise(Err)
 
-  CALL cmfe_CustomTimingGet(CustomTimingOdeSolver, CustomTimingParabolicSolver, CustomTimingFESolver, Err)
-
+  CALL cmfe_CustomTimingGet(CustomTimingOdeSolver, CustomTimingParabolicSolver, CustomTimingFESolverBeforeMainSim, t1D3D, t3D1D, &
+    & Err)
+    
   CALL WriteTimingFile()
 
   PRINT*, ""
@@ -2037,7 +2040,7 @@ SUBROUTINE WriteTimingFile()
 
   TimeStampStr = GetTimeStamp()
 
-  WRITE(123,"(4A,7(I11,A),(F8.3,A),11(F0.8,A),2(A,A))") &
+  WRITE(123,"(4A,7(I11,A),(F8.3,A),11(F0.8,A),2(A,A),2(F8.3,A))") &
     & TRIM(TimeStampStr), ';', &
     & TRIM(Hostname(1:22)), ';', &
     & NumberOfComputationalNodes, ';', &
@@ -2060,7 +2063,9 @@ SUBROUTINE WriteTimingFile()
     & CustomTimingFESolver, ';', &
     & CustomTimingFESolverBeforeMainSim, ';', &
     & TRIM(ADJUSTL(MemoryConsumption1StTimeStep)), ';', &
-    & TRIM(ADJUSTL(MemoryConsumptionEnd)), ';'
+    & TRIM(ADJUSTL(MemoryConsumptionEnd)), ';;;;;;;;;;;;;;;;;', &  ! 22
+    & t1D3D, ';', &
+    & t3D1D, ';'
 
   CLOSE(unit=123)
 END SUBROUTINE WriteTimingFile
