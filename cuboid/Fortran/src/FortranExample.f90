@@ -77,16 +77,16 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
 
   LOGICAL :: independent_field_auto_create=.FALSE.
   !all lengths in [cm]
-  REAL(CMISSRP), PARAMETER :: LENGTH=3.0_CMISSRP ! (6)     X-direction
-  REAL(CMISSRP), PARAMETER :: WIDTH= 3.0_CMISSRP ! (3)     Y-direction
-  REAL(CMISSRP), PARAMETER :: HEIGHT=1.5_CMISSRP ! (1.5)   Z-direction
+  REAL(CMISSRP), PARAMETER :: LENGTH=1.0_CMISSRP ! (6)     X-direction
+  REAL(CMISSRP), PARAMETER :: WIDTH= 1.0_CMISSRP ! (3)     Y-direction
+  REAL(CMISSRP), PARAMETER :: HEIGHT=1.0_CMISSRP ! (1.5)   Z-direction
 
   !all times in [ms]
   REAL(CMISSRP) :: time !=10.00_CMISSRP
   REAL(CMISSRP), PARAMETER :: PERIODD=1.00_CMISSRP
   REAL(CMISSRP)            :: TIME_STOP=1000.0_CMISSRP
 
-  REAL(CMISSRP) :: ODE_TIME_STEP = 0.00001_CMISSRP            !0.0001_CMISSRP
+  REAL(CMISSRP) :: ODE_TIME_STEP = 0.0001_CMISSRP            !0.0001_CMISSRP
   REAL(CMISSRP) :: PDE_TIME_STEP = 0.0005_CMISSRP
   REAL(CMISSRP) :: ELASTICITY_TIME_STEP = 0.10000000001_CMISSRP !0.5_CMISSRP!0.05_CMISSRP!0.8_CMISSRP
 
@@ -401,7 +401,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   IF (ComputationalNodeNumber == 0) PRINT*, "1.) Start solve before stimulation"
   CALL CPU_Time(TimeInitFinshed)
 
-  CALL cmfe_Problem_Solve(Problem,Err)
+  !CALL cmfe_Problem_Solve(Problem,Err)
 
   CALL CPU_Time(TimeStretchSimFinished)
   IF (ComputationalNodeNumber == 0) print*, "2.) After solve before stimulation"
@@ -593,7 +593,7 @@ SUBROUTINE SetParameters()
   INTEGER(CMISSLINTg) :: scale, NumberArguments
   INTEGER(CMISSINTg) :: length
 
-  NumberGlobalXElements=3 !6
+  NumberGlobalXElements=4 !6
   NumberGlobalYElements=4 !4
   NumberGlobalZElements=1 !1
   NumberOfInSeriesFibres=1 !1
@@ -746,7 +746,7 @@ SUBROUTINE SetParameters()
 
   NumberOfDomains=NumberOfComputationalNodes
 
-  CALL cmfe_OutputSetOn("EMG",Err)
+  !CALL cmfe_OutputSetOn("EMG",Err)
 
 
   ! output time step information
