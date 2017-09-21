@@ -1,0 +1,1 @@
+ccc && cmake .. && make
