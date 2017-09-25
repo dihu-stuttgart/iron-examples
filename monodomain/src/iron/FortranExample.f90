@@ -137,7 +137,7 @@ PROGRAM MONODOMAINEXAMPLE
   TYPE(cmfe_MeshType) :: Mesh
   TYPE(cmfe_ProblemType) :: Problem
   TYPE(cmfe_RegionType) :: Region,WorldRegion
-  TYPE(cmfe_SolverType) :: Solver
+  TYPE(cmfe_SolverType) :: Solver,Solver1,Solver2
   TYPE(cmfe_SolverEquationsType) :: SolverEquations
   
   !Generic CMISS variables
@@ -148,6 +148,8 @@ PROGRAM MONODOMAINEXAMPLE
   INTEGER(CMISSIntg) :: FirstNodeNumber,LastNodeNumber
   INTEGER(CMISSIntg) :: FirstNodeDomain,LastNodeDomain,NodeDomain
   INTEGER(CMISSIntg) :: Err
+  
+  TYPE(cmfe_SolverType) :: linearSolver
   
 #ifdef WIN32
   !Initialise QuickWin
@@ -257,7 +259,7 @@ PROGRAM MONODOMAINEXAMPLE
     CellmlFile="slow_TK_2014_12_08.xml"
     !CellmlFile="hodgkin_huxley_1952.cellml"   
     SLOW_TWITCH=.TRUE.
-    SplittingOrder="O2"
+    SplittingOrder="O1"
   ENDIF
 
   ! determine file name for output files
@@ -449,7 +451,7 @@ PROGRAM MONODOMAINEXAMPLE
   !Create the CellML environment
   CALL cmfe_CellML_Initialise(CellML,Err)
   CALL cmfe_CellML_CreateStart(CellMLUserNumber,Region,CellML,Err)
-  !Import a Noble 1998 model from a file
+  !Import a model from a file
   CALL cmfe_CellML_ModelImport(CellML,CellmlFile,CellMLModelIndex,Err)
    
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -647,20 +649,20 @@ PROGRAM MONODOMAINEXAMPLE
   CALL cmfe_Problem_SolversCreateStart(Problem,Err)
 
   !Get the first (DAE) solver
-  CALL cmfe_Solver_Initialise(Solver,Err)
-  CALL cmfe_Problem_SolverGet(Problem,CMFE_CONTROL_LOOP_NODE,1,Solver,Err)
+  CALL cmfe_Solver_Initialise(Solver1,Err)
+  CALL cmfe_Problem_SolverGet(Problem,CMFE_CONTROL_LOOP_NODE,1,Solver1,Err)
   !Set the DAE time step
-  CALL cmfe_Solver_DAETimeStepSet(Solver,ODE_TIME_STEP,Err) 
+  CALL cmfe_Solver_DAETimeStepSet(Solver1,ODE_TIME_STEP,Err) 
   !changing to the Heun method for the Strang-Splitting
   IF(SplittingOrder .EQ. "O2") THEN
-    CALL cmfe_Solver_DAEEulerSolverTypeSet(Solver,CMFE_SOLVER_DAE_EULER_IMPROVED,Err)
+    CALL cmfe_Solver_DAEEulerSolverTypeSet(Solver1,CMFE_SOLVER_DAE_EULER_IMPROVED,Err)
   ENDIF
   
-  CALL cmfe_Solver_OutputTypeSet(Solver,CMFE_SOLVER_NO_OUTPUT,Err)
-  !CALL cmfe_Solver_OutputTypeSet(Solver,CMFE_SOLVER_PROGRESS_OUTPUT,Err)
-  !CALL cmfe_Solver_OutputTypeSet(Solver,CMFE_SOLVER_TIMING_OUTPUT,Err)
-  !CALL cmfe_Solver_OutputTypeSet(Solver,CMFE_SOLVER_SOLVER_OUTPUT,Err)
-  !CALL cmfe_Solver_OutputTypeSet(Solver,CMFE_SOLVER_MATRIX_OUTPUT,Err)
+  CALL cmfe_Solver_OutputTypeSet(Solver1,CMFE_SOLVER_NO_OUTPUT,Err)
+  !CALL cmfe_Solver_OutputTypeSet(Solver1,CMFE_SOLVER_PROGRESS_OUTPUT,Err)
+  !CALL cmfe_Solver_OutputTypeSet(Solver1,CMFE_SOLVER_TIMING_OUTPUT,Err)
+  !CALL cmfe_Solver_OutputTypeSet(Solver1,CMFE_SOLVER_SOLVER_OUTPUT,Err)
+  !CALL cmfe_Solver_OutputTypeSet(Solver1,CMFE_SOLVER_MATRIX_OUTPUT,Err)
   
   !---------------------------------------------------------------------------------------------------------------------------------
   !Get the second (Parabolic) solver
@@ -669,7 +671,11 @@ PROGRAM MONODOMAINEXAMPLE
   
   IF(SplittingOrder .EQ. "O2") THEN
     !!! changing to CRANK_NICOLSON
-    CALL cmfe_Solver_DynamicSchemeSet(Solver,CMFE_SOLVER_DYNAMIC_CRANK_NICOLSON_SCHEME,Err)
+    !!!CALL cmfe_Solver_DynamicSchemeSet(Solver,CMFE_SOLVER_DYNAMIC_CRANK_NICOLSON_SCHEME,Err)    
+    NULLIFY(linearSolver%solver)
+    CALL cmfe_Solver_DynamicLinearSolverGet(Solver, linearSolver, Err)
+    CALL cmfe_Solver_LinearTypeSet(linearSolver, CMFE_SOLVER_LINEAR_DIRECT_SOLVE_TYPE, Err)
+    CALL cmfe_Solver_LinearDirectTypeSet(linearSolver,CMFE_SOLVER_DIRECT_LU , Err)
   ENDIF
   
   CALL cmfe_Solver_OutputTypeSet(Solver,CMFE_SOLVER_NO_OUTPUT,Err)
@@ -685,20 +691,22 @@ PROGRAM MONODOMAINEXAMPLE
   !---------------------------------------------------------------------------------------------------------------------------------
   !Set the time step for the second DAE solver
   !---------------------------------------------------------------------------------------------------------------------------------
-  !Get the second (DAE) solver
-  CALL cmfe_Solver_Initialise(Solver,Err)
-  CALL cmfe_Problem_SolverGet(Problem,CMFE_CONTROL_LOOP_NODE,3,Solver,Err)
-  !Set the DAE time step
-  CALL cmfe_Solver_DAETimeStepSet(Solver,ODE_TIME_STEP,Err) 
+  IF(SplittingOrder .EQ. "O2") THEN
+    !Get the second (DAE) solver
+    CALL cmfe_Solver_Initialise(Solver2,Err)
+    CALL cmfe_Problem_SolverGet(Problem,CMFE_CONTROL_LOOP_NODE,3,Solver2,Err)
+    !Set the DAE time step
+    CALL cmfe_Solver_DAETimeStepSet(Solver2,ODE_TIME_STEP,Err)
+  ENDIF
   !---------------------------------------------------------------------------------------------------------------------------------
 ! TODO: this was copied from laplace example
 !  IF(SOLVER_TYPE==0) THEN
-!    CALL cmfe_Solver_LinearTypeSet(Solver,CMFE_SOLVER_LINEAR_DIRECT_SOLVE_TYPE,Err)
-!    CALL cmfe_Solver_LibraryTypeSet(Solver,CMFE_SOLVER_MUMPS_LIBRARY,Err)
+!    CALL cmfe_Solver_LinearTypeSet(Solver2,CMFE_SOLVER_LINEAR_DIRECT_SOLVE_TYPE,Err)
+!    CALL cmfe_Solver_LibraryTypeSet(Solver2,CMFE_SOLVER_MUMPS_LIBRARY,Err)
 !  ELSE
-!    CALL cmfe_Solver_LinearTypeSet(Solver,CMFE_SOLVER_LINEAR_ITERATIVE_SOLVE_TYPE,Err)
-!    CALL cmfe_Solver_LinearIterativeAbsoluteToleranceSet(Solver,1.0E-12_CMISSRP,Err)
-!    CALL cmfe_Solver_LinearIterativeRelativeToleranceSet(Solver,1.0E-12_CMISSRP,Err)
+!    CALL cmfe_Solver_LinearTypeSet(Solver2,CMFE_SOLVER_LINEAR_ITERATIVE_SOLVE_TYPE,Err)
+!    CALL cmfe_Solver_LinearIterativeAbsoluteToleranceSet(Solver2,1.0E-12_CMISSRP,Err)
+!    CALL cmfe_Solver_LinearIterativeRelativeToleranceSet(Solver2,1.0E-12_CMISSRP,Err)
 !  ENDIF
   
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -707,23 +715,24 @@ PROGRAM MONODOMAINEXAMPLE
   CALL cmfe_Problem_CellMLEquationsCreateStart(Problem,Err)
   !Get the first DAE solver  
   !Get the CellML equations
-  CALL cmfe_Solver_Initialise(Solver,Err)
-  CALL cmfe_Problem_SolverGet(Problem,CMFE_CONTROL_LOOP_NODE,1,Solver,Err)
+  CALL cmfe_Solver_Initialise(Solver1,Err)
+  CALL cmfe_Problem_SolverGet(Problem,CMFE_CONTROL_LOOP_NODE,1,Solver1,Err)
   CALL cmfe_CellMLEquations_Initialise(CellMLEquations,Err)
-  CALL cmfe_Solver_CellMLEquationsGet(Solver,CellMLEquations,Err)
+  CALL cmfe_Solver_CellMLEquationsGet(Solver1,CellMLEquations,Err)
   !Add in the CellML environement
   CALL cmfe_CellMLEquations_CellMLAdd(CellMLEquations,CellML,CellMLIndex,Err)
   !---------------------------------------------------------------------------------------------------------------------------------
-  IF(SplittingOrder .EQ. "O2") THEN
+  !!!IF(SplittingOrder .EQ. "O2") THEN
     !Get the second DAE solver  
-    CALL cmfe_Solver_Initialise(Solver,Err)
-    CALL cmfe_Problem_SolverGet(Problem,CMFE_CONTROL_LOOP_NODE,3,Solver,Err)
+  !!!  CALL cmfe_Solver_Initialise(Solver2,Err)
+  !!!  CALL cmfe_Problem_SolverGet(Problem,CMFE_CONTROL_LOOP_NODE,3,Solver2,Err)
+    !!!Solver2=Solver1
     !Get the CellML equations
-    CALL cmfe_CellMLEquations_Initialise(CellMLEquations,Err)
-    CALL cmfe_Solver_CellMLEquationsGet(Solver,CellMLEquations,Err)
+  !!!  CALL cmfe_CellMLEquations_Initialise(CellMLEquations,Err)
+  !!!  CALL cmfe_Solver_CellMLEquationsGet(Solver2,CellMLEquations,Err)
     !Add in the CellML environement
-    CALL cmfe_CellMLEquations_CellMLAdd(CellMLEquations,CellML,CellMLIndex,Err)  
-  ENDIF
+  !!!  CALL cmfe_CellMLEquations_CellMLAdd(CellMLEquations,CellML,CellMLIndex,Err)  
+  !!!ENDIF
   !---------------------------------------------------------------------------------------------------------------------------------
   !Finish the creation of the problem solver CellML equations
   CALL cmfe_Problem_CellMLEquationsCreateFinish(Problem,Err)

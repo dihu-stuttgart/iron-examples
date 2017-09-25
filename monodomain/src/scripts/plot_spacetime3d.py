@@ -48,8 +48,9 @@ print "No. of data point: ",n_data
 # get the data
 Vm=[0.0 for i in range(n_timestep)]
 for i_time in range (n_timestep):
-    Vm[i_time]=exnode_reader.parse_file(foldername+files[i_time*n_parts+1],[["Vm",1]])
-    #print "time step: ", i_time
+    #Vm[i_time]=exnode_reader.parse_file(foldername+files[i_time*n_parts+1],[["Vm",1]])
+    Vm[i_time]=exnode_reader.parse_file(foldername+files[i_time*n_parts],[["Vm",1]])
+    print "time step: ", i_time
     #print Vm[i_time]  
 #print "Vm: ",Vm
 
