@@ -219,6 +219,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   LOGICAL, PARAMETER :: DEBUGGING_PROBLEM_OUTPUT = .FALSE.     ! output the 'solver' object after it is created
   LOGICAL :: DebuggingOutput = .FALSE.    ! enable information from solvers
   INTEGER(CMISSIntg) :: ModelType = 0 ! ### PAPERBRANCH SETTING     ! type of the model (was OldTomoMechanics): 0 = "3a","MultiPhysStrain", old version of tomo that works in parallel, 1 = "3","MultiPhysStrain", new version of tomo that is more stable in numerical sense, 2 = "4","Titin"
+  INTEGER(CMISSIntg) :: SplittingType = 0   ! 0 = godunov splitting, 1 = strang splitting
   LOGICAL :: EnableExportEMG = .FALSE.
   LOGICAL :: ElasticityDisabled = .FALSE. ! do create the elasticity control loop
   
@@ -332,6 +333,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   CHARACTER(len=1024) :: FibreDistributionFile = "MU_fibre_distribution_4050.txt"
   CHARACTER(len=256) :: MemoryConsumption1StTimeStep = "", MemoryConsumptionBeforeSim, Temp
   CHARACTER(len=10000) :: WorkingDirectory
+  CHARACTER(len=1024) :: ScenarioName = ""
   
   LOGICAL :: CustomProfilingEnabled !< If custom profiling is compiled in
   LOGICAL :: TauProfilingEnabled !< If TAU profiling is compiled in
@@ -443,7 +445,6 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
 
   INTEGER(CMISSIntg), PARAMETER :: ProblemUserNumber=1
 
-  INTEGER(CMISSIntg), PARAMETER :: SolverDAEIndex=1
   INTEGER(CMISSIntg), PARAMETER :: SolverParabolicIndex=2
   INTEGER(CMISSIntg), PARAMETER :: SolverFEIndex=1
 
@@ -485,7 +486,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   TYPE(cmfe_BasisType) :: QuadraticBasis,LinearBasis,LinearBasisM
   TYPE(cmfe_BoundaryConditionsType) :: BoundaryConditionsM,BoundaryConditionsFE
   TYPE(cmfe_CellMLType) :: CellML
-  TYPE(cmfe_CellMLEquationsType) :: CellMLEquations
+  TYPE(cmfe_CellMLEquationsType) :: CellMLEquations, CellMLEquations2
   TYPE(cmfe_ControlLoopType) :: ControlLoopMain
   TYPE(cmfe_ControlLoopType) :: ControlLoopM,ControlLoopFE
   TYPE(cmfe_CoordinateSystemType) :: CoordinateSystemFE,CoordinateSystemM,WorldCoordinateSystem
@@ -516,7 +517,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   TYPE(cmfe_MeshType) :: MeshM
   TYPE(cmfe_ProblemType) :: Problem
   TYPE(cmfe_RegionType) :: RegionFE,RegionM,WorldRegion
-  TYPE(cmfe_SolverType) :: SolverDAE,SolverParabolic
+  TYPE(cmfe_SolverType) :: SolverDAE,SolverDAE2,SolverParabolic
   TYPE(cmfe_SolverType) :: SolverFE,LinearSolverFE
   TYPE(cmfe_SolverEquationsType) :: SolverEquationsM,SolverEquationsFE
   TYPE(cmfe_NodesType) :: Nodes
@@ -1125,6 +1126,8 @@ SUBROUTINE ParseAssignment(Line, LineNumber, ScenarioInputFile)
       ENDIF
     CASE ("modeltype")
       READ(StrValue, *, IOSTAT=Stat) ModelType
+    CASE ("splittingtype")
+      READ(StrValue, *, IOSTAT=Stat) SplittingType
     CASE ("tklinparam")
       READ(StrValue, *, IOSTAT=Stat) TkLinParam
     CASE ("debuggingoutput")
@@ -1155,7 +1158,7 @@ SUBROUTINE ParseAssignment(Line, LineNumber, ScenarioInputFile)
       READ(StrValue, *, IOSTAT=Stat) Vmax
     CASE ("initialstretch")
       READ(StrValue, *, IOSTAT=Stat) InitialStretch
-    CASE ("odensteps")
+    CASE ("odensteps","nodesteps","nstepsode","nsteps")
       READ(StrValue, *, IOSTAT=Stat) OdeNSteps
     CASE ("inputdirectory")
       InputDirectory = TRIM(ADJUSTL(StrValue))
@@ -1175,6 +1178,8 @@ SUBROUTINE ParseAssignment(Line, LineNumber, ScenarioInputFile)
       FibreDistributionFile = TRIM(ADJUSTL(StrValue))
     CASE ("cellmlmodelfilename")
       CellMLModelFilename = TRIM(ADJUSTL(StrValue))
+    CASE ("scenarioname")
+      ScenarioName = TRIM(ADJUSTL(StrValue))
     CASE DEFAULT
       Read(LineNumber, *, IOSTAT=Stat) StrValue
       WRITE(*,'(A)') TRIM(ScenarioInputFile) // ":" // TRIM(StrValue) // ": Unrecognized variable """ // TRIM(VariableName) // """."
@@ -1429,6 +1434,7 @@ SUBROUTINE ParseParameters()
   ! output scenario information
   IF (ComputationalNodeNumber == 0) THEN
     PRINT *, "CellML file: """ // TRIM(CellMLModelFilename) // """"
+    PRINT *, "Scenario name: """ // TRIM(ScenarioName) // """"
     PRINT *, ""
     PRINT *, "---------- Timing parameters -----------------------------------------------"
     PRINT *, "The time unit is 1 ms."
@@ -1438,19 +1444,25 @@ SUBROUTINE ParseParameters()
     PRINT *, ""
 
     PRINT "(A,F7.2,A,F0.5,A,I5)", "- MAIN_TIME_LOOP,         Δt =", TimeStop, ", dt = ", ElasticityTimeStep, &
-      & ", # Iter: ", CEILING(TimeStop/ElasticityTimeStep)
-    PRINT "(A,F0.4,A,F0.5,A,I5)", "  - MONODOMAIN_TIME_LOOP, Δt = ", ElasticityTimeStep, ", dt = ", PDETimeStep,&
-      & ", # Iter: ", CEILING(ElasticityTimeStep/PDETimeStep)
-    PRINT "(A,F0.5,A,I5)", "    - SolverDAE,                      dt = ", ODETimeStep, &
-      & ", # Iter: ", CEILING(PDETimeStep/ODETimeStep)
+      & ", N. Iter: ", CEILING(TimeStop/ElasticityTimeStep)
+    PRINT "(A,F0.4,A,F0.5,A,I5)", "  - MONODOMAIN_TIME_LOOP, Δt = ", ElasticityTimeStep, ",  dt = ", PDETimeStep,&
+      & ", N. Iter: ", CEILING(ElasticityTimeStep/PDETimeStep)
+    IF (OdeNSteps /= -1) THEN
+      PRINT "(A,F0.5,A,I5,A,I5,A)", "    - SolverDAE,                       dt = ", ODETimeStep, &
+        & ", N. Iter: ", CEILING(PDETimeStep/ODETimeStep), " (set by OdeNSteps=", OdeNSteps, ")"
+    ELSE 
+      PRINT "(A,F0.5,A,I5,A,I5,A)", "    - SolverDAE,                       dt = ", ODETimeStep, &
+        & ", N. Iter: ", CEILING(PDETimeStep/ODETimeStep)
+    ENDIF
+    
     PRINT "(A,F0.4)", "    - SolverParabolic"
     
     IF (ElasticityDisabled) THEN
       PRINT "(A)",               "  - ELASTICITY_LOOP     (disabled) "
     ELSE
-      PRINT "(A,I5)",               "  - ELASTICITY_LOOP,                               # Iter: ",&
+      PRINT "(A,I5)",               "  - ELASTICITY_LOOP,                                N. Iter: ",&
         & ElasticityLoopMaximumNumberOfIterations
-      PRINT "(A,I4,A,E10.4)", "    - SolverFE,                 # Iter (max): ", NewtonMaximumNumberOfIterations, &
+      PRINT "(A,I4,A,E10.4)", "    - SolverFE,                 N. Iter (max): ", NewtonMaximumNumberOfIterations, &
         & ", Tol.: ",NewtonTolerance
       PRINT "(A,I4)", "      - LinearSolverFE"
       PRINT *, ""
@@ -1519,6 +1531,16 @@ SUBROUTINE ParseParameters()
 
     PRINT *, ""
     PRINT *, "---------- Solvers -----------------------------------------------------------"
+  
+  
+    SELECT CASE(SplittingType)
+      CASE(0)
+        PRINT *, "Splitting:       0 Godunov"
+      CASE(1)
+        PRINT *, "Splitting:       1 Strang"
+      CASE DEFAULT
+        PRINT *, "Splitting:       0 Godunov (default)"
+    END SELECT
   
     SELECT CASE(ODESolverId)
       CASE(1)
@@ -3504,25 +3526,47 @@ SUBROUTINE CreateProblem()
   !Define the problem
   CALL cmfe_Problem_Initialise(Problem,Err)
 
-  IF (ModelType == 0) THEN    ! 3a, "MultiPhysStrain", old tomo mechanics
-    CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
-      & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_GUDUNOV_MONODOMAIN_1D3D_ELASTICITY_SUBTYPE],Problem,Err)
+  IF (ModelType == 0) THEN    ! 3a, "MultiPhysStrain", old tomo mechanics 
+    
+    IF (SplittingType == 1) THEN    ! Strang splitting
+      CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
+        & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_STRANG_MONODOMAIN_1D3D_ELASTICITY_SUBTYPE],Problem,Err)
+    
+    ELSE      ! Godunov splitting
+      CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
+        & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_GUDUNOV_MONODOMAIN_1D3D_ELASTICITY_SUBTYPE],Problem,Err)
+    ENDIF
       
   ELSEIF (ModelType == 1) THEN ! 3, , "MultiPhysStrain", numerically more stable
-    CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
-      & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_MONODOMAIN_1D3D_ACTIVE_STRAIN_SUBTYPE],Problem,Err)
-  !  CALL cmfe_Problem_SpecificationSet(Problem,CMFE_PROBLEM_MULTI_PHYSICS_CLASS,CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE, &
-  !   & CMFE_PROBLEM_MONODOMAIN_1D3D_ACTIVE_STRAIN_SUBTYPE,Err)
+    
+    IF (SplittingType == 1) THEN    ! Strang splitting
+      CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
+        & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_STRANG_MONODOMAIN_1D3D_ACTIVE_STRAIN_SUBTYPE],Problem,Err)
+    !  CALL cmfe_Problem_SpecificationSet(Problem,CMFE_PROBLEM_MULTI_PHYSICS_CLASS,CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE, &
+    !   & CMFE_PROBLEM_MONODOMAIN_1D3D_ACTIVE_STRAIN_SUBTYPE,Err)
+    
+    ELSE      ! Godunov splitting
+      CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
+        & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_GUDUNOV_MONODOMAIN_1D3D_ACTIVE_STRAIN_SUBTYPE],Problem,Err)
+    !  CALL cmfe_Problem_SpecificationSet(Problem,CMFE_PROBLEM_MULTI_PHYSICS_CLASS,CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE, &
+    !   & CMFE_PROBLEM_MONODOMAIN_1D3D_ACTIVE_STRAIN_SUBTYPE,Err)
+    ENDIF
 
   ELSEIF (ModelType == 2) THEN ! 4, "Titin"
-    CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
-     & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_MONODOMAIN_ELASTICITY_W_TITIN_SUBTYPE],Problem,Err)
-  !  CALL cmfe_Problem_SpecificationSet(Problem,CMFE_PROBLEM_MULTI_PHYSICS_CLASS,CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE, &
-  !   & CMFE_PROBLEM_MONODOMAIN_ELASTICITY_W_TITIN_SUBTYPE,Err)
+    IF (SplittingType == 1) THEN    ! Strang splitting
+      CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
+       & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_STRANG_MONODOMAIN_ELASTICITY_W_TITIN_SUBTYPE],Problem,Err)
+    !  CALL cmfe_Problem_SpecificationSet(Problem,CMFE_PROBLEM_MULTI_PHYSICS_CLASS,CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE, &
+    !   & CMFE_PROBLEM_MONODOMAIN_ELASTICITY_W_TITIN_SUBTYPE,Err)
 
+    ELSE      ! Godunov splitting
+      CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
+       & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_GUDUNOV_MONODOMAIN_ELASTICITY_W_TITIN_SUBTYPE],Problem,Err)
+    !  CALL cmfe_Problem_SpecificationSet(Problem,CMFE_PROBLEM_MULTI_PHYSICS_CLASS,CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE, &
+    !   & CMFE_PROBLEM_MONODOMAIN_ELASTICITY_W_TITIN_SUBTYPE,Err)
+    
+    ENDIF
   ENDIF
-
-
   CALL cmfe_Problem_CreateFinish(Problem,Err)
 
 END SUBROUTINE CreateProblem
@@ -3567,7 +3611,7 @@ SUBROUTINE CreateControlLoops()
     !CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopM,CMFE_CONTROL_LOOP_NO_OUTPUT,Err)
   ELSE
     CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopM,CMFE_CONTROL_LOOP_NO_OUTPUT,Err)
-    CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopM,CMFE_CONTROL_LOOP_FILE_OUTPUT,Err)
+    !CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopM,CMFE_CONTROL_LOOP_FILE_OUTPUT,Err)
   ENDIF
 
   !set the finite elasticity loop (simple type)
@@ -3600,7 +3644,7 @@ SUBROUTINE CreateSolvers()
   !Create the DAE solver
   CALL cmfe_Solver_Initialise(SolverDAE,Err)
   CALL cmfe_Problem_SolverGet(Problem,[ControlLoopMonodomainNumber,CMFE_CONTROL_LOOP_NODE], &
-   & SolverDAEIndex,SolverDAE,Err)
+   & 1,SolverDAE,Err)
   CALL cmfe_Solver_DAETimeStepSet(SolverDAE,ODETimeStep,Err)  ! #timestepset
   
   ! might be handy some day:
@@ -3624,7 +3668,6 @@ SUBROUTINE CreateSolvers()
         PRINT *, ""
       ENDIF
   END SELECT
-  !-------------------------------------------------------------------------------------------  
   !Set the Number of ODE time steps. CARE: This makes cmfe_Solver_DAETimeStepSet() obsolete!
   IF(ODESolverId==1 .AND. OdeNSteps/=-1) THEN
     CALL cmfe_Solver_DAEEulerForwardSetNSteps(SolverDAE,OdeNSteps,Err)
@@ -3636,7 +3679,7 @@ SUBROUTINE CreateSolvers()
   !CALL cmfe_Solver_DAESolverTypeSet(SolverDAE,CMFE_SOLVER_DAE_EXTERNAL,Err)
 
   IF (DebuggingOutput) THEN
-    CALL cmfe_Solver_OutputTypeSet(SolverDAE,CMFE_SOLVER_NO_OUTPUT,Err)
+    CALL cmfe_Solver_OutputTypeSet(SolverDAE,CMFE_SOLVER_SOLVER_OUTPUT,Err)
     !CALL cmfe_Solver_OutputTypeSet(SolverDAE,CMFE_SOLVER_PROGRESS_OUTPUT,Err)
     !CALL cmfe_Solver_OutputTypeSet(SolverDAE,CMFE_SOLVER_TIMING_OUTPUT,Err)
     !CALL cmfe_Solver_OutputTypeSet(SolverDAE,CMFE_SOLVER_SOLVER_OUTPUT,Err)
@@ -3644,7 +3687,62 @@ SUBROUTINE CreateSolvers()
   ELSE
     CALL cmfe_Solver_OutputTypeSet(SolverDAE,CMFE_SOLVER_NO_OUTPUT,Err)
   ENDIF
+  
+  IF (SplittingType == 1) THEN    ! Strang splitting
+      
+    !Create the second DAE solver in the Strang splitting scheme
+    ! The time step width is independent of the splitting scheme, i.e. internally the time span is correctly divided by 2 for each subcycle.
+    
+    CALL cmfe_Solver_Initialise(SolverDAE2,Err)
+    CALL cmfe_Problem_SolverGet(Problem,[ControlLoopMonodomainNumber,CMFE_CONTROL_LOOP_NODE], &
+     & 3,SolverDAE2,Err)
+    CALL cmfe_Solver_DAETimeStepSet(SolverDAE2,ODETimeStep,Err)  ! #timestepset
+    
+    ! might be handy some day:
+    ! CALL cmfe_Solver_DAETimesSet(SolverDAE2,?0.0_CMISSRP?,?0.001_CMISSRP?,Err)
+    
+    SELECT CASE(ODESolverId) !use bdf instead of default-explicitEuler
+      CASE(2) ! BDF
+        CALL cmfe_Solver_DAESolverTypeSet(SolverDAE2,CMFE_SOLVER_DAE_BDF,Err)
+        CALL cmfe_Solver_DAEbdfSetTolerance(SolverDAE2,0.0000001_CMISSRP,0.0000001_CMISSRP,err) !default values were both: 1.0E-7
+      CASE(3) ! GL, not stable yet
+        CALL cmfe_Solver_DAESolverTypeSet(SolverDAE2,CMFE_SOLVER_DAE_GL,Err)
+      CASE(4) ! Crank-Nicolson, not stable yet
+        CALL cmfe_Solver_DAESolverTypeSet(SolverDAE2,CMFE_SOLVER_DAE_CRANK_NICOLSON,Err)
+      CASE(5) ! improved Euler (Heun)
+        CALL cmfe_Solver_DAEEulerSolverTypeSet(SolverDAE2,CMFE_SOLVER_DAE_EULER_IMPROVED,Err)
+      CASE DEFAULT
+        IF (ComputationalNodeNumber == 0) THEN
+          PRINT *, ""
+          PRINT *, "Warning: For the DAE Problem (0D) the standard explicit Euler method is used, which is slow. " &
+            & // NEW_LINE('A') &
+            & // "          Consider to use another DAE solver via the command line option 'ODESolverId'."
+          PRINT *, ""
+        ENDIF
+    END SELECT
+    !Set the Number of ODE time steps. CARE: This makes cmfe_Solver_DAETimeStepSet() obsolete!
+    IF(ODESolverId==1 .AND. OdeNSteps/=-1) THEN
+      CALL cmfe_Solver_DAEEulerForwardSetNSteps(SolverDAE2,OdeNSteps,Err)
+    ELSEIF(ODESolverId==5 .AND. OdeNSteps/=-1) THEN
+      CALL cmfe_Solver_DAEEulerImprovedSetNSteps(SolverDAE2,OdeNSteps,Err)
+    END IF
+    
+    !> \todo or not-todo... solve the CellML equations on the GPU for efficiency (later)
+    !CALL cmfe_Solver_DAESolverTypeSet(SolverDAE2,CMFE_SOLVER_DAE_EXTERNAL,Err)
 
+    IF (DebuggingOutput) THEN
+      CALL cmfe_Solver_OutputTypeSet(SolverDAE2,CMFE_SOLVER_SOLVER_OUTPUT,Err)
+      !CALL cmfe_Solver_OutputTypeSet(SolverDAE2,CMFE_SOLVER_PROGRESS_OUTPUT,Err)
+      !CALL cmfe_Solver_OutputTypeSet(SolverDAE2,CMFE_SOLVER_TIMING_OUTPUT,Err)
+      !CALL cmfe_Solver_OutputTypeSet(SolverDAE2,CMFE_SOLVER_SOLVER_OUTPUT,Err)
+      !CALL cmfe_Solver_OutputTypeSet(SolverDAE2,CMFE_SOLVER_MATRIX_OUTPUT,Err)
+    ELSE
+      CALL cmfe_Solver_OutputTypeSet(SolverDAE2,CMFE_SOLVER_NO_OUTPUT,Err)
+    ENDIF
+    
+  ENDIF
+
+  !-----------------------------------------------------------------------------------------------------
   !Create the parabolic solver
   CALL cmfe_Solver_Initialise(SolverParabolic,Err)
   CALL cmfe_Problem_SolverGet(Problem,[ControlLoopMonodomainNumber,CMFE_CONTROL_LOOP_NODE], &
@@ -3778,10 +3876,10 @@ SUBROUTINE CreateSolvers()
   ! only enable output for specified ComputeNode
   IF (DebuggingOutput) THEN
     IF (ComputationalNodeNumber == 0) THEN
-      !CALL cmfe_Solver_OutputTypeSet(SolverFE,CMFE_SOLVER_NO_OUTPUT,Err)
+      CALL cmfe_Solver_OutputTypeSet(SolverFE,CMFE_SOLVER_NO_OUTPUT,Err)
       !CALL cmfe_Solver_OutputTypeSet(SolverFE,CMFE_SOLVER_PROGRESS_OUTPUT,Err)
       !CALL cmfe_Solver_OutputTypeSet(SolverFE,CMFE_SOLVER_TIMING_OUTPUT,Err)
-      CALL cmfe_Solver_OutputTypeSet(SolverFE,CMFE_SOLVER_SOLVER_OUTPUT,Err)
+      !CALL cmfe_Solver_OutputTypeSet(SolverFE,CMFE_SOLVER_SOLVER_OUTPUT,Err)
       !CALL cmfe_Solver_OutputTypeSet(SolverFE,CMFE_SOLVER_MATRIX_OUTPUT,Err)
     ELSE
       CALL cmfe_Solver_OutputTypeSet(SolverFE,CMFE_SOLVER_NO_OUTPUT,Err)
@@ -3812,7 +3910,7 @@ SUBROUTINE CreateSolvers()
   CALL cmfe_CellMLEquations_Initialise(CellMLEquations,Err)
   
   !                           problem, control loop indetifiers (in),                    solverindex (in), solver (out)
-  CALL cmfe_Problem_SolverGet(Problem,[ControlLoopMonodomainNumber,CMFE_CONTROL_LOOP_NODE],SolverDAEIndex,SolverDAE,Err)
+  CALL cmfe_Problem_SolverGet(Problem,[ControlLoopMonodomainNumber,CMFE_CONTROL_LOOP_NODE],1,SolverDAE,Err)
   CALL cmfe_Solver_CellMLEquationsGet(SolverDAE,CellMLEquations,Err)
   
   !                                   in              in     out
@@ -4240,7 +4338,7 @@ SUBROUTINE WriteTimingFile()
       & 'duration FileOutputPreLoad (user); duration export EMG user; duration export EMG system; duration FileOutput (user); ' // &
       & 'duration FileOutput (system); duration FileOutputPreload (system); MonodomainSolverId; MonodomainPreconditionerId; ' // &
       & 'ODESolverId; NumberOfElementsInAtomX; NumberOfElementsInAtomY; NumberOfElementsInAtomZ; NumberOfSubdomainsX; ' // & 
-      & 'NumberOfSubdomainsY; NumberOfSubdomainsZ; ModelType'
+      & 'NumberOfSubdomainsY; NumberOfSubdomainsZ; ModelType; ScenarioName'
       
     CLOSE(unit=123)
   ENDIF
@@ -4262,7 +4360,7 @@ SUBROUTINE WriteTimingFile()
 
   IF (CustomProfilingEnabled) THEN
 
-    WRITE(123,"(4A,7(I11,A),(F8.3,A),11(F0.8,A),2(A,A),8(I7,A),21(F25.13,A),A,A,9(F8.3,A),3(I2,A),6(I8,A),I1)") &
+    WRITE(123,"(4A,7(I11,A),(F8.3,A),11(F0.8,A),2(A,A),8(I7,A),21(F25.13,A),A,A,9(F8.3,A),3(I2,A),6(I8,A),I1,2A)") &
       & TRIM(TimeStampStr), ';', &
       & TRIM(Hostname(1:22)), ';', &          ! end of 4A
       & NumberOfComputationalNodes, ';', &
@@ -4361,11 +4459,12 @@ SUBROUTINE WriteTimingFile()
       & NumberOfSubdomainsX, ';', &
       & NumberOfSubdomainsY, ';', &
       & NumberOfSubdomainsZ, ';', &                            ! end of 6(I8,A)
-      & ModelType                                       ! I1
+      & ModelType, ';', &                                       ! I1
+      & TRIM(ScenarioName)
 
   ELSE  ! custom profiling is disabled
     
-    WRITE(123,"(4A,7(I11,A),(F8.3,A),11(F0.8,A),2(A,A),8(I7,A),9(F8.3,A),3(I2,A),6(I8,A),I1)") &
+    WRITE(123,"(4A,7(I11,A),(F8.3,A),11(F0.8,A),2(A,A),8(I7,A),9(F8.3,A),3(I2,A),6(I8,A),I1,2A)") &
       & TRIM(TimeStampStr), ';', &
       & TRIM(Hostname(1:22)), ';', &                    ! end of 4A
       & NumberOfComputationalNodes, ';', &
@@ -4415,7 +4514,8 @@ SUBROUTINE WriteTimingFile()
       & NumberOfSubdomainsX, ';', &
       & NumberOfSubdomainsY, ';', &
       & NumberOfSubdomainsZ, ';', &                          ! end of 6(I8,A)
-      & ModelType                                     ! I1
+      & ModelType, ';', &                                     ! I1
+      & TRIM(ScenarioName)
   ENDIF
 
   CLOSE(unit=123)
