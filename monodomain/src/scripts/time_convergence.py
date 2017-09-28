@@ -126,7 +126,7 @@ def makeplot_TimeConv_err(x,y,labels):
     print "i, slope: ", i,slope
     #abline_values=[pow(10,sl[i]*j+intercepts[i]) for j  in np.log10(x[i])]  
     abline_values=[pow(10,slope*j+intercept) for j  in np.log10(x)]
-    plt.loglog(x,abline_values,sl_lines[i],label=sl_labels[i],linewidth=3)
+    plt.loglog(x,abline_values,sl_lines[1],label=sl_labels[1],linewidth=3)
 
   #plt.title("Vm")
   plt.xlabel('Time step, $dt$',{'fontsize':20})
@@ -151,7 +151,8 @@ err_L2=[0.0 for i in range(1)]
 err_L2[0]=find_err_L2_rel(Vm)
 
 labels=[None for i in range(1)]
-labels[0]="1st order"
+#labels[0]="1st order"
+labels[0]="2nd order"
 
 num_runs=len(timesteps)
 makeplot_TimeConv_err(timesteps[1:num_runs],err_L2,labels)

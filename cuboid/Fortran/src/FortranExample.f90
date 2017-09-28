@@ -220,7 +220,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   LOGICAL :: DebuggingOutput = .FALSE.    ! enable information from solvers
   INTEGER(CMISSIntg) :: ModelType = 0 ! ### PAPERBRANCH SETTING     ! type of the model (was OldTomoMechanics): 0 = "3a","MultiPhysStrain", old version of tomo that works in parallel, 1 = "3","MultiPhysStrain", new version of tomo that is more stable in numerical sense, 2 = "4","Titin"
   INTEGER(CMISSIntg) :: SplittingType = 0   ! 0 = godunov splitting, 1 = strang splitting
-  LOGICAL :: EnableExportEMG = .FALSE.
+  LOGICAL :: EnableExportEMG = .TRUE.
   LOGICAL :: ElasticityDisabled = .FALSE. ! do create the elasticity control loop
   
   ! physical dimensions in [cm]

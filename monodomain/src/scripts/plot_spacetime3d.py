@@ -50,7 +50,7 @@ Vm=[0.0 for i in range(n_timestep)]
 for i_time in range (n_timestep):
     #Vm[i_time]=exnode_reader.parse_file(foldername+files[i_time*n_parts+1],[["Vm",1]])
     Vm[i_time]=exnode_reader.parse_file(foldername+files[i_time*n_parts],[["Vm",1]])
-    print "time step: ", i_time
+    #print "time step: ", i_time
     #print Vm[i_time]  
 #print "Vm: ",Vm
 
