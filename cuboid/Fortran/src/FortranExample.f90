@@ -75,6 +75,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   INTEGER(CMISSIntg) :: ModelType = 0 ! ### PAPERBRANCH SETTING     ! type of the model (was OldTomoMechanics): 0 = "3a","MultiPhysStrain", old version of tomo that works in parallel, 1 = "3","MultiPhysStrain", new version of tomo that is more stable in numerical sense, 2 = "4","Titin"
   LOGICAL :: EnableExportEMG = .FALSE.
   LOGICAL :: ElasticityDisabled = .FALSE. ! do create the elasticity control loop
+  LOGICAL :: onlyStimTime = .FALSE.
   
   ! physical dimensions in [cm]
   REAL(CMISSRP) :: PhysicalLength=1.0_CMISSRP ! ### PAPERBRANCH SETTING !    X-direction
@@ -608,7 +609,9 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
     CALL cmfe_CustomSolverInfoReset(Err)    
     CALL cmfe_CustomProfilingStop("level 0: stimulation handling",Err)
     
-    CALL cmfe_Problem_Solve(Problem,Err)
+    IF(.NOT. onlyStimTime) THEN
+      CALL cmfe_Problem_Solve(Problem,Err)
+    ENDIF
     
     CALL cmfe_CustomProfilingStart("level 0: stimulation handling",Err)
     CALL HandleSolverInfo(time+StimDuration)
@@ -1457,7 +1460,7 @@ SUBROUTINE ParseParameters()
   IF (ODESolverId/=5 .AND. UseStrangSplitting) THEN
     PRINT *, "Strang-Splitting must be used with Improved Euler method! &
      & Use ODESolverId=5 instead."
-    STOP
+    !STOP
   ENDIF
   
 END SUBROUTINE ParseParameters
@@ -3491,6 +3494,7 @@ SUBROUTINE CreateSolvers()
       CALL cmfe_Solver_DAEEulerSolverTypeSet(SolverDAE,CMFE_SOLVER_DAE_EULER_IMPROVED,Err)
     CASE DEFAULT
       IF (ComputationalNodeNumber == 0) THEN
+        CALL cmfe_Solver_DAEEulerSolverTypeSet(SolverDAE,CMFE_SOLVER_DAE_EULER_FORWARD,Err)
         PRINT *, ""
         PRINT *, "Warning: For the DAE Problem (0D) the standard explicit Euler method is used, which is slow. " // NEW_LINE('A') &
           & // "          Consider to use another DAE solver via the command line option 'ODESolverId'."
