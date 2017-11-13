@@ -1460,7 +1460,7 @@ SUBROUTINE ParseParameters()
   IF (ODESolverId/=5 .AND. UseStrangSplitting) THEN
     PRINT *, "Strang-Splitting must be used with Improved Euler method! &
      & Use ODESolverId=5 instead."
-    !STOP
+    STOP
   ENDIF
   
 END SUBROUTINE ParseParameters
