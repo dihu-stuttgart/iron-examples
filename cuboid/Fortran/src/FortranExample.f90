@@ -70,7 +70,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   !Test program parameters
   LOGICAL :: DebuggingOnlyRunShortPartOfSimulation = .FALSE.    ! only run one timestep of MAIN_LOOP with stimulus
   LOGICAL, PARAMETER :: DEBUGGING_PARALLEL_BARRIER = .FALSE.   ! execute a barrier where all processes wait when running in parallel, this is helpful to only debug the execution of single processes in a parallel scenario with gdb
-  LOGICAL, PARAMETER :: DEBUGGING_PROBLEM_OUTPUT = .FALSE.     ! output the 'solver' object after it is created
+  LOGICAL, PARAMETER :: DEBUGGING_PROBLEM_OUTPUT = .TRUE.     ! output the 'solver' object after it is created
   LOGICAL :: DebuggingOutput = .FALSE.    ! enable information from solvers
   INTEGER(CMISSIntg) :: ModelType = 0 ! ### PAPERBRANCH SETTING     ! type of the model (was OldTomoMechanics): 0 = "3a","MultiPhysStrain", old version of tomo that works in parallel, 1 = "3","MultiPhysStrain", new version of tomo that is more stable in numerical sense, 2 = "4","Titin"
   LOGICAL :: EnableExportEMG = .FALSE.
@@ -3444,7 +3444,7 @@ SUBROUTINE CreateControlLoops()
     !CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopM,CMFE_CONTROL_LOOP_NO_OUTPUT,Err)
   ELSE
     CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopM,CMFE_CONTROL_LOOP_NO_OUTPUT,Err)
-    CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopM,CMFE_CONTROL_LOOP_FILE_OUTPUT,Err)
+    !CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopM,CMFE_CONTROL_LOOP_FILE_OUTPUT,Err)
   ENDIF
 
   !set the finite elasticity loop (simple type)
@@ -3619,21 +3619,21 @@ SUBROUTINE CreateSolvers()
     
   ENDIF
   
-  IF (DEBUGGING_PROBLEM_OUTPUT) THEN
-    PRINT*, ""
-    PRINT*, "before cmfe_Solver_LinearTypeSet"
-    CALL cmfe_PrintSolver(SolverParabolic, 5, 10, Err)
-  ENDIF
+  !!!IF (DEBUGGING_PROBLEM_OUTPUT) THEN
+  !!!  PRINT*, ""
+  !!!  PRINT*, "before cmfe_Solver_LinearTypeSet"
+  !!!  CALL cmfe_PrintSolver(SolverParabolic, 5, 10, Err)
+  !!!ENDIF
   
   ! Recreate linearSolver subtype as direct solver (instead of iterative solver)
   !CALL cmfe_Solver_LinearTypeSet(linearSolver, CMFE_SOLVER_LINEAR_DIRECT_SOLVE_TYPE, Err)
   
-  IF (DEBUGGING_PROBLEM_OUTPUT) THEN
-    PRINT*, ""
-    PRINT*, "========================================================================="
-    PRINT*, "After cmfe_Solver_LinearTypeSet"
-    CALL cmfe_PrintSolver(SolverParabolic, 5, 10, Err)
-  ENDIF
+  !IF (DEBUGGING_PROBLEM_OUTPUT) THEN
+  !  PRINT*, ""
+  !  PRINT*, "========================================================================="
+  !  PRINT*, "After cmfe_Solver_LinearTypeSet"
+  !  CALL cmfe_PrintSolver(SolverParabolic, 5, 10, Err)
+  !ENDIF
   
   !SOLVER_LINEAR_DIRECT_TYPE_SET
   
@@ -3763,6 +3763,13 @@ SUBROUTINE CreateSolvers()
   !SolverFE%solver%NONLINEAR_SOLVER%NEWTON_SOLVER%LINEAR_SOLVER%OUTPUT_TYPE = SOLVER_MATRIX_OUTPUT
   
   !STOP
+  
+  
+  IF (DEBUGGING_PROBLEM_OUTPUT) THEN
+    PRINT*, ""
+    PRINT*, "after_cmfe_Problem_SolverEquationsCreateFinish"
+    CALL cmfe_PrintSolver(SolverParabolic, 5, 10, Err)
+  ENDIF
   
 END SUBROUTINE CreateSolvers
 
