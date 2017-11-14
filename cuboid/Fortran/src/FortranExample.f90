@@ -1,151 +1,5 @@
-!Y! temporary marks for cellml implementation. this is what is used in the actual RHS.:
-!Y! C_m = 0.58 (like in shortens paper);gam= 2.79 (slow twitch);R_a = 150y; tsi  = 0.000001y (xi aus shortens paper);tsi2= 0.0025y (xi);tsi3= 0.0005y(xi);FF = 96485y(Faradys constant);tau_K  = 559y(slow); tau_Na = 559y(slow);  f_T= 0.00174y(slow); tau_K2  = 40229.885y;  tau_Na2 = 40229.885y; 
-!Y! I_K_rest= 0.34y(slow); I_Na_rest = -0.43ys;alpha_h_bar = 0.0081y; alpha_m_bar = 0.288y; alpha_n_bar = 0.0131y; beta_h_bar = 4.38y;beta_m_bar = 1.38y;  beta_n_bar  = 0.067y; 
-!Y! V_m = -46y;  V_n  = -40y;  V_h  = -45y; V_a  = 70y;  V_S_inf = -68ys;  V_h_K_inf  = -40y;  A_a  = 150y;  A_S_inf  = 7.1ys;  A_h_K_inf = 7.5y;  K_alpha_h  = 14.7y;  K_beta_h  = 9y; 
-!Y! K_alpha_m = 10y;  K_alpha_n  = 7y;  K_beta_m  = 18y;  K_beta_n  = 40y; RR  = 8314.41y; TT  = 293y;  g_Cl_bar  = 3.275ys;  g_K_bar  = 10.8ys;  g_Na_bar  = 134ys; G_K  = 1.85y; 
-!Y! del  = 0.4y (delta);  Constant K_K  = 950y;  K_S  = 1y;  K_m_K  = 1y; K_m_Na = 13y; S_i  = 10y; J_NaK_bar  = 0.0001656y;  Constant V_tau = 70ys; 
-!/* Constant vS */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[0]*/ = -82.265452; 
-!/* Constant vT */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[1]*/ = -82.205709; 
-!/* Constant K_t */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[2]*/ = 6.137539; 
-!/* Constant K_i */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[3]*/ = 150.901412; 
-!/* Constant K_e */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[4]*/ = 5.891642; 
-!/* Constant Na_i */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[5]*/ = 12.699134; 
-!/* Constant Na_t */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[6]*/ = 132.186003; 
-!/* Constant Na_e */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[7]*/ = 133.009207; 
-!Y! eta_Cl  = 0.1y;  eta_IR  = 1.0y;  eta_DR  = 0.45y;  eta_Na = 0.1y; eta_NaK  = 0.1y; 
-!/* Constant I_HH */ 
-!DUMMY_ASSIGNMENT /*OC_KNOWN[0]*/ = 0.0; 
-!/* Constant n */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[8]*/ = 0.006824; 
-!/* Constant h_K */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[9]*/ = 0.995321; 
-!/* Constant m */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[10]*/ = 0.026848; 
-!/* Constant h */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[11]*/ = 0.598402; 
-!/* Constant S */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[12]*/ = 0.586035; 
-!/* Constant n_t */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[13]*/ = 0.006883; 
-!/* Constant h_K_t */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[14]*/ = 0.996416; 
-!/* Constant m_t */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[15]*/ = 0.027053; 
-!/* Constant h_t */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[16]*/ = 0.595856; 
-!/* Constant S_t */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[17]*/ = 0.586011; 
-!/* Constant O_0 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[18]*/ = 0.000002; 
-!/* Constant O_1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[19]*/ = 0.000006; 
-!/* Constant O_2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[20]*/ = 0.000007; 
-!/* Constant O_3 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[21]*/ = 0.000003; 
-!/* Constant O_4 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[22]*/ = 0.000001; 
-!Y! k_L  = 0.002y;  k_Lm  = 1000y;  f  = 0.2y;  alpha1  = 0.2y;  K  = 4.5y;  Vbar = -20y; 
-!/* Constant C_0 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[23]*/ = 0.883113; 
-!/* Constant C_1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[24]*/ = 0.111480; 
-!/* Constant C_2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[25]*/ = 0.005277; 
-!/* Constant C_3 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[26]*/ = 0.000111; 
-!/* Constant C_4 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[27]*/ = 0.000001; 
-!Y! nu_SR  = 2.4375ys;  K_SR  = 1; L_e  = 0.00004y;  tau_R  = 0.75y;tau_SR_R  = 0.75y;  L_S_0  = 1.0y (L_x in shortens paper); 
-!/* Constant L_S */ 
-!DUMMY_ASSIGNMENT /*OC_KNOWN[1]*/ = 1.0; 
-!Y! Constant R_R  = 0.5y; k_T_on  = 0.0885ys;  k_T_off = 0.115y;  T_tot_0 = 140y; k_P_on  = 0ys;  k_P_off  = 0ys;  P_tot  = 1500y;  k_Mg_on  = 0ys;  k_Mg_off  = 0s;  k_Cs_on  = 0.000004y; 
-!Y! k_Cs_off = 0.005y;  Cs_tot  = 31000y;  k_CATP_on  = 0.15y; k_CATP_off = 30y;  k_MATP_on  = 0.0015y;  k_MATP_off  = 0.15y;  tau_ATP  = 0.375y; tau_Mg  = 1.5y; k_0_on = 0y; 
-!Y! k_0_off  = 0.15y;  k_Ca_on  = 0.15y;  k_Ca_off  = 0.05y;  f_o  = 0.5ys; f_p  = 5ys;  h_o = 0.08ys;  h_p  = 0.06ys; g_o = 0.04ys; b_p = 0.00000394ys;  k_p = 0.00000362y;  A_p  = 1y; 
-!Y! B_p = 0.0001y;  PP  = 6y;
-! #################    Dynamics model:     ##########################
-! x_0  = 0.05;  x_1  = 0.000000;  x_2  = 0.050000;  eta  = 0.000107;
-! #######################   end  ####################################
-!/* Constant dummy */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[28]*/ = 0.0;
-! #################    Dynamics model:     ##########################
-! zeta  = 0.0021; 
-! #######################   end   ###################################
-!/* Constant Ca_1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[29]*/ = 0.884732; 
-!/* Constant Ca_SR1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[30]*/ = 1580.867624; 
-!/* Constant Ca_2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[31]*/ = 0.399902; 
-!/* Constant Ca_SR2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[32]*/ = 1581.712973; 
-!/* Constant Ca_T_2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[33]*/ = 8.194027; 
-!/* Constant Ca_P1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[34]*/ = 615.000000; 
-!/* Constant Ca_P2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[35]*/ = 615.000000; 
-!/* Constant Mg_P1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[36]*/ = 811.000000; 
-!/* Constant Mg_P2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[37]*/ = 811.000000; 
-!/* Constant Ca_Cs1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[38]*/ = 17306.257267; 
-!/* Constant Ca_Cs2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[39]*/ = 17310.310128; 
-!/* Constant Ca_ATP1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[40]*/ = 2.244070; 
-!/* Constant Ca_ATP2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[41]*/ = 1.523121; 
-!/* Constant Mg_ATP1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[42]*/ = 7242.253138; 
-!/* Constant Mg_ATP2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[43]*/ = 7242.274705; 
-!/* Constant ATP1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[44]*/ = 755.502793; 
-!/* Constant ATP2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[45]*/ = 756.202174; 
-!/* Constant Mg1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[46]*/ = 957.730848; 
-!/* Constant Mg2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[47]*/ = 957.725457; 
-!/* Constant Ca_CaT2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[48]*/ = 1.347074; 
-!/* Constant D_0 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[49]*/ = 0.343574; 
-!/* Constant D_1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[50]*/ = 0.554181; 
-!/* Constant D_2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[51]*/ = 1.342379; 
-!/* Constant A_1 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[52]*/ = 0.133380; 
-!/* Constant A_2 */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[53]*/ = 0.106577; 
-!/* Constant P */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[54]*/ = 0.231949; 
-!/* Constant P_SR */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[55]*/ = 0.284897; 
-!/* Constant P_C_SR */ 
-!DUMMY_ASSIGNMENT /*OC_STATE[56]*/ = 0.173921; 
-!Y! i2  = 60ys;
-! V_o_Eqn   =  0.950000 *L_S_0* 3.14159265358979*pow(R_R, 2.00000); 
-! V_SR_Eqn  =  0.0500000*L_S_0* 3.14159265358979*pow(R_R, 2.00000); 
-! V_1_Eqn   =  0.0100000*V_o_Eqn; 
-! V_2_Eqn   =  0.990000 *V_o_Eqn; 
-! V_SR1_Eqn =  0.0100000*V_SR_Eqn; 
-! V_SR2_Eqn =  0.990000 *V_SR_Eqn;
-!#######################################################################################
-
 !> \file
-!> \author Adam Reeve
+!> \author Adam Reeve, Benjamin Maier, Nehzat Emamy, Aaron Krämer, Thomas Klotz
 !> \brief This is an example program to solve a finite elasticity equation using OpenCMISS calls.
 !>
 !> \section LICENSE
@@ -219,7 +73,9 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   LOGICAL, PARAMETER :: DEBUGGING_PROBLEM_OUTPUT = .FALSE.     ! output the 'solver' object after it is created
   LOGICAL :: DebuggingOutput = .FALSE.    ! enable information from solvers
   INTEGER(CMISSIntg) :: ModelType = 0 ! ### PAPERBRANCH SETTING     ! type of the model (was OldTomoMechanics): 0 = "3a","MultiPhysStrain", old version of tomo that works in parallel, 1 = "3","MultiPhysStrain", new version of tomo that is more stable in numerical sense, 2 = "4","Titin"
+  INTEGER(CMISSIntg) :: SplittingType = 0   ! 0 = godunov splitting, 1 = strang splitting
   LOGICAL :: EnableExportEMG = .FALSE.
+  LOGICAL :: ElasticityDisabled = .FALSE. ! do create the elasticity control loop
   
   ! physical dimensions in [cm]
   REAL(CMISSRP) :: PhysicalLength=1.0_CMISSRP ! ### PAPERBRANCH SETTING !    X-direction
@@ -232,10 +88,12 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   REAL(CMISSRP) :: StimPeriod=10.0_CMISSRP ! ### PAPERBRANCH SETTING
   REAL(CMISSRP) :: TimeStop=10.0_CMISSRP ! ### PAPERBRANCH SETTING
 
+  ! time discretizatzion settings
   REAL(CMISSRP) :: ODETimeStep = 0.0001_CMISSRP ! ### PAPERBRANCH SETTING: 0.0001
   REAL(CMISSRP) :: PDETimeStep = 0.0005_CMISSRP ! ### PAPERBRANCH SETTING: 0.0005
   REAL(CMISSRP) :: ElasticityTimeStep = 0.1_CMISSRP ! ### PAPERBRANCH SETTING
-  INTEGER(CMISSIntg) :: OdeNSteps = -1 ! can be used to set ODETimeStep implicitly. 
+  INTEGER(CMISSIntg) :: OdeNSteps = -1 ! can be used to set ODETimeStep implicitly.
+  INTEGER(CMISSIntg) :: PdeNSteps = -1  ! overrides PDETimeStep
 
   REAL(CMISSRP) :: StimDuration=0.1_CMISSRP ! ### PAPERBRANCH SETTING ! should be the same as ElasticityTimeStep
 
@@ -305,6 +163,9 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   INTEGER(CMISSIntg) :: NumberOfElementsInAtomX
   INTEGER(CMISSIntg) :: NumberOfElementsInAtomY
   INTEGER(CMISSIntg) :: NumberOfElementsInAtomZ
+  INTEGER(CMISSIntg) :: NumberOfElementsInSubdomainX = 0  ! if zero it will be computed from size of atoms
+  INTEGER(CMISSIntg) :: NumberOfElementsInSubdomainY = 0
+  INTEGER(CMISSIntg) :: NumberOfElementsInSubdomainZ = 0
   INTEGER(CMISSIntg) :: NumberOfElementsMInXi1
   INTEGER(CMISSIntg) :: NumberGlobalYFibres
   INTEGER(CMISSINTg) :: NumberOfFibreLinesPerGlobalElement
@@ -313,7 +174,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   INTEGER(CMISSIntg) :: NumberOfElementsMPerFibre ! this is the total number of (0D sub-)cells (nodes) per global fibre.
   INTEGER(CMISSIntg) :: NumberOfElementsMPerFibreLine
   INTEGER(CMISSIntg) :: NumberOfNodesMPerFibreLine
-  INTEGER(CMISSIntg) :: nSubdomainsX, nSubdomainsY, nSubdomainsZ
+  INTEGER(CMISSIntg) :: NumberOfSubdomainsX = 0, NumberOfSubdomainsY = 0, NumberOfSubdomainsZ = 0    ! if NumberOfElementsInSubdomain is set, NumberOfSubdomains will also be used. Otherwise is will be computed.
   INTEGER(CMISSIntg) :: NumberOfAtomsPerSubdomainX, NumberOfAtomsPerSubdomainY, NumberOfAtomsPerSubdomainZ
   INTEGER(CMISSIntg) :: NumberOfAtomsLastSubdomainX, NumberOfAtomsLastSubdomainY, NumberOfAtomsLastSubdomainZ
   INTEGER(CMISSIntg) :: NumberOfElementsLastAtomX, NumberOfElementsLastAtomY, NumberOfElementsLastAtomZ
@@ -328,6 +189,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   CHARACTER(len=1024) :: FibreDistributionFile = "MU_fibre_distribution_4050.txt"
   CHARACTER(len=256) :: MemoryConsumption1StTimeStep = "", MemoryConsumptionBeforeSim, Temp
   CHARACTER(len=10000) :: WorkingDirectory
+  CHARACTER(len=1024) :: ScenarioName = ""
   
   LOGICAL :: CustomProfilingEnabled !< If custom profiling is compiled in
   LOGICAL :: TauProfilingEnabled !< If TAU profiling is compiled in
@@ -550,7 +412,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
   TimeStart = DurationSystemUser(2)
     
   CALL ParseParameters()
-
+    
   !================================================================================================================================
   !  G E N E R A L   F E A T U R E S
   !================================================================================================================================
@@ -718,7 +580,7 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
     CALL SetStimulationAtNodes(StimValuePerNode)
 
     IF (ComputationalNodeNumber == 0) THEN
-      PRINT "(A,I4,A,I6)", "   Number of stimulated fibres: ", NumberFiringFibres," of",NumberOfFibres
+      PRINT "(A,I4,A,I6)", "   Number of stimulated fibres on process 0: ", NumberFiringFibres," of",NumberOfFibres
     ENDIF
 
     !-------------------------------------------------------------------------------------------------------------------------------
@@ -733,7 +595,6 @@ PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
     
     CALL cmfe_CustomProfilingStart("level 0: stimulation handling",Err)
     CALL HandleSolverInfo(time)
-
     Temp = GetMemoryConsumption()
     IF (DebuggingOnlyRunShortPartOfSimulation) EXIT
 
@@ -1054,6 +915,18 @@ SUBROUTINE ParseAssignment(Line, LineNumber, ScenarioInputFile)
       READ(StrValue, *, IOSTAT=Stat) NumberOfElementsInAtomY
     CASE ("numberofelementsinatomz","az")
       READ(StrValue, *, IOSTAT=Stat) NumberOfElementsInAtomZ
+    CASE ("numberofelementsinsubdomainx","ex")
+      READ(StrValue, *, IOSTAT=Stat) NumberOfElementsInSubdomainX
+    CASE ("numberofelementsinsubdomainy","ey")
+      READ(StrValue, *, IOSTAT=Stat) NumberOfElementsInSubdomainY
+    CASE ("numberofelementsinsubdomainz","ez")
+      READ(StrValue, *, IOSTAT=Stat) NumberOfElementsInSubdomainZ
+    CASE ("numberofsubdomainsx","px")
+      READ(StrValue, *, IOSTAT=Stat) NumberOfSubdomainsX
+    CASE ("numberofsubdomainsy","py")
+      READ(StrValue, *, IOSTAT=Stat) NumberOfSubdomainsY
+    CASE ("numberofsubdomainsz","pz")
+      READ(StrValue, *, IOSTAT=Stat) NumberOfSubdomainsZ
     CASE ("odesolverid")
       READ(StrValue, *, IOSTAT=Stat) ODESolverId
     CASE ("monodomainsolverid")
@@ -1109,12 +982,16 @@ SUBROUTINE ParseAssignment(Line, LineNumber, ScenarioInputFile)
       ENDIF
     CASE ("modeltype")
       READ(StrValue, *, IOSTAT=Stat) ModelType
+    CASE ("splittingtype")
+      READ(StrValue, *, IOSTAT=Stat) SplittingType
     CASE ("tklinparam")
       READ(StrValue, *, IOSTAT=Stat) TkLinParam
     CASE ("debuggingoutput")
       READ(StrValue, *, IOSTAT=Stat) DebuggingOutput
     CASE ("debuggingonlyrunshortpartofsimulation")
       READ(StrValue, *, IOSTAT=Stat) DebuggingOnlyRunShortPartOfSimulation
+    CASE ("elasticitydisabled")
+      READ(StrValue, *, IOSTAT=Stat) ElasticityDisabled
     CASE ("physicallength")
       READ(StrValue, *, IOSTAT=Stat) PhysicalLength
     CASE ("physicalwidth")
@@ -1137,8 +1014,10 @@ SUBROUTINE ParseAssignment(Line, LineNumber, ScenarioInputFile)
       READ(StrValue, *, IOSTAT=Stat) Vmax
     CASE ("initialstretch")
       READ(StrValue, *, IOSTAT=Stat) InitialStretch
-    CASE ("odensteps")
+    CASE ("odensteps","nodesteps","nstepsode","nsteps")
       READ(StrValue, *, IOSTAT=Stat) OdeNSteps
+    CASE ("pdensteps","npdesteps","nstepspde")
+      READ(StrValue, *, IOSTAT=Stat) PdeNSteps
     CASE ("inputdirectory")
       InputDirectory = TRIM(ADJUSTL(StrValue))
       
@@ -1157,6 +1036,8 @@ SUBROUTINE ParseAssignment(Line, LineNumber, ScenarioInputFile)
       FibreDistributionFile = TRIM(ADJUSTL(StrValue))
     CASE ("cellmlmodelfilename")
       CellMLModelFilename = TRIM(ADJUSTL(StrValue))
+    CASE ("scenarioname")
+      ScenarioName = TRIM(ADJUSTL(StrValue))
     CASE DEFAULT
       Read(LineNumber, *, IOSTAT=Stat) StrValue
       WRITE(*,'(A)') TRIM(ScenarioInputFile) // ":" // TRIM(StrValue) // ": Unrecognized variable """ // TRIM(VariableName) // """."
@@ -1283,6 +1164,9 @@ SUBROUTINE ParseParameters()
      & "     See the example scenario file for file format and variable names. Variables will be set in order of the arguments."
   ENDIF
 !#################### the following is only necessary to correct user output, i think. ############################################
+  IF (PdeNSteps/=-1) THEN
+    PDETimeStep = ElasticityTimeStep/PdeNSteps
+  ENDIF
   IF (OdeNSteps/=-1) THEN
     ODETimeStep = PDETimeStep/OdeNSteps
   END IF
@@ -1322,7 +1206,7 @@ SUBROUTINE ParseParameters()
  
   IF (TRIM(CellMLModelFilename) == "standard") THEN
     IF (ModelType == 0) THEN    ! 3a, "MultiPhysStrain", old tomo mechanics
-      CellMLModelFilename = TRIM(inputDirectory) // "slow_TK_2014_12_08.xml"
+      CellMLModelFilename = TRIM(inputDirectory) // "new_slow_TK_2014_12_08.cellml"
       !StimValue = 20000.0_CMISSRP !700.0_CMISSRP!700.0_CMISSRP
 
     ELSEIF (ModelType == 1) THEN ! 3, , "MultiPhysStrain", numerically more stable
@@ -1411,6 +1295,7 @@ SUBROUTINE ParseParameters()
   ! output scenario information
   IF (ComputationalNodeNumber == 0) THEN
     PRINT *, "CellML file: """ // TRIM(CellMLModelFilename) // """"
+    PRINT *, "Scenario name: """ // TRIM(ScenarioName) // """"
     PRINT *, ""
     PRINT *, "---------- Timing parameters -----------------------------------------------"
     PRINT *, "The time unit is 1 ms."
@@ -1420,18 +1305,38 @@ SUBROUTINE ParseParameters()
     PRINT *, ""
 
     PRINT "(A,F7.2,A,F0.5,A,I5)", "- MAIN_TIME_LOOP,         Δt =", TimeStop, ", dt = ", ElasticityTimeStep, &
-      & ", # Iter: ", CEILING(TimeStop/ElasticityTimeStep)
-    PRINT "(A,F0.4,A,F0.5,A,I5)", "  - MONODOMAIN_TIME_LOOP, Δt = ", ElasticityTimeStep, ", dt = ", PDETimeStep,&
-      & ", # Iter: ", CEILING(ElasticityTimeStep/PDETimeStep)
-    PRINT "(A,F0.5,A,I5)", "    - SolverDAE,                      dt = ", ODETimeStep, &
-      & ", # Iter: ", CEILING(PDETimeStep/ODETimeStep)
+      & ", N. Iter: ", CEILING(TimeStop/ElasticityTimeStep)
+    
+    
+    IF (PdeNSteps /= -1) THEN
+      PRINT "(A,F0.4,A,F0.5,2(A,I5),A)", "  - MONODOMAIN_TIME_LOOP, Δt = ", ElasticityTimeStep, ",  dt = ", PDETimeStep,&
+        & ", N. Iter: ", CEILING(ElasticityTimeStep/PDETimeStep), " (set by PdeNSteps=", PdeNSteps, ")"
+    ELSE
+      PRINT "(A,F0.4,A,F0.5,A,I5)", "  - MONODOMAIN_TIME_LOOP, Δt = ", ElasticityTimeStep, ",  dt = ", PDETimeStep,&
+        & ", N. Iter: ", CEILING(ElasticityTimeStep/PDETimeStep)
+    ENDIF
+      
+    IF (OdeNSteps /= -1) THEN
+      PRINT "(A,F0.5,A,I5,A,I5,A)", "    - SolverDAE,                       dt = ", ODETimeStep, &
+        & ", N. Iter: ", CEILING(PDETimeStep/ODETimeStep), " (set by OdeNSteps=", OdeNSteps, ")"
+    ELSE 
+      PRINT "(A,F0.5,A,I5,A,I5,A)", "    - SolverDAE,                       dt = ", ODETimeStep, &
+        & ", N. Iter: ", CEILING(PDETimeStep/ODETimeStep)
+    ENDIF
+    
     PRINT "(A,F0.4)", "    - SolverParabolic"
-    PRINT "(A,I5)",               "  - ELASTICITY_LOOP,                               # Iter: ",&
-      & ElasticityLoopMaximumNumberOfIterations
-    PRINT "(A,I4,A,E10.4)", "    - SolverFE,                 # Iter (max): ", NewtonMaximumNumberOfIterations, &
-      & ", Tol.: ",NewtonTolerance
-    PRINT "(A,I4)", "      - LinearSolverFE"
-    PRINT *, ""
+    
+    IF (ElasticityDisabled) THEN
+      PRINT "(A)",               "  - ELASTICITY_LOOP     (disabled) "
+    ELSE
+      PRINT "(A,I5)",               "  - ELASTICITY_LOOP,                                N. Iter: ",&
+        & ElasticityLoopMaximumNumberOfIterations
+      PRINT "(A,I4,A,E10.4)", "    - SolverFE,                 N. Iter (max): ", NewtonMaximumNumberOfIterations, &
+        & ", Tol.: ",NewtonTolerance
+      PRINT "(A,I4)", "      - LinearSolverFE"
+      PRINT *, ""
+    ENDIF
+    
     IF (DebuggingOnlyRunShortPartOfSimulation) PRINT *, "Abort after first stimulation."
     PRINT *, "OutputTimeStepStride:", OutputTimeStepStride, ", EnableExportEMG:", EnableExportEMG
 
@@ -1461,14 +1366,15 @@ SUBROUTINE ParseParameters()
     PRINT *,""
     PRINT "(3(A,I5),A)", "              Non-decomposable atom: ", NumberOfElementsInAtomX, &
       & "x", NumberOfElementsInAtomY, "x", NumberOfElementsInAtomZ, " elements"
-    PRINT "(A,3(I5,A))", "                          Subdomain: ", NumberOfElementsInAtomX*NumberOfAtomsPerSubdomainX, "x", &
-      & NumberOfElementsInAtomY*NumberOfAtomsPerSubdomainY, "x", &
-      & NumberOfElementsInAtomZ*NumberOfAtomsPerSubdomainZ, " elements"
-    PRINT "(A,4(I5,A))", "               Domain decomposition: ", nSubdomainsX, "x", nSubdomainsY, "x", nSubdomainsZ, &
+    PRINT "(A,3(I5,A))", "                        Subdomain e: ", NumberOfElementsInSubdomainX, "x", &
+      & NumberOfElementsInSubdomainY, "x", &
+      & NumberOfElementsInSubdomainZ, " elements"
+    PRINT "(A,4(I5,A))", "             Domain decomposition p: ", NumberOfSubdomainsX, "x", NumberOfSubdomainsY, "x", &
+      & NumberOfSubdomainsZ, &
       & " subdomains"
     PRINT "(2(A,I5))", " Number of initial domains for domain decomposition: ", PretendedNumberOfDomainsForDomainDecomposition, &
       & ", number of processes: ", NumberOfDomains
-    PRINT "(A,I5)", " Number of different processes for a fibre: ", nSubdomainsX
+    PRINT "(A,I5)", " Number of different processes for a fibre: ", NumberOfSubdomainsX
     
     PRINT *, ""
     PRINT *, "---------- Physical parameters -----------------------------------------------"
@@ -1494,6 +1400,16 @@ SUBROUTINE ParseParameters()
 
     PRINT *, ""
     PRINT *, "---------- Solvers -----------------------------------------------------------"
+  
+  
+    SELECT CASE(SplittingType)
+      CASE(0)
+        PRINT *, "Splitting:       0 Godunov"
+      CASE(1)
+        PRINT *, "Splitting:       1 Strang"
+      CASE DEFAULT
+        PRINT *, "Splitting:       0 Godunov (default)"
+    END SELECT
   
     SELECT CASE(ODESolverId)
       CASE(1)
@@ -1570,6 +1486,12 @@ SUBROUTINE ParseParameters()
     STOP
   ENDIF
 
+  IF (ODESolverId/=5 .AND. SplittingType==1) THEN
+    PRINT *, "Strang-Splitting must be used with Improved Euler method! &
+     & Use ODESolverId=5 instead."
+    STOP
+  ENDIF
+  
 END SUBROUTINE ParseParameters
 
 SUBROUTINE PrintWorkingDirectory()
@@ -1790,35 +1712,40 @@ FUNCTION CeilDiv(X,Y)
   ENDIF
 END FUNCTION CeilDiv
 
-FUNCTION GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, nSubdomainsX, nSubdomainsY, nSubdomainsZ)
+FUNCTION GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, &
+  & ParameterNumberOfSubdomainsX, ParameterNumberOfSubdomainsY, ParameterNumberOfSubdomainsZ)
   INTEGER(CMISSIntg), INTENT(IN) :: NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ
-  INTEGER(CMISSIntg), INTENT(IN) :: nSubdomainsX, nSubdomainsY, nSubdomainsZ
+  INTEGER(CMISSIntg), INTENT(IN) :: ParameterNumberOfSubdomainsX, ParameterNumberOfSubdomainsY, ParameterNumberOfSubdomainsZ
   INTEGER(CMISSIntg) :: NumberOfSubdomainsX, NumberOfSubdomainsY, NumberOfSubdomainsZ
   INTEGER(CMISSIntg) :: nEmptySubdomainsX, nEmptySubdomainsY, nEmptySubdomainsZ, nEmptySubdomains
   INTEGER(CMISSIntg) :: nSubdomains
   INTEGER(CMISSIntg) :: GetNumberOfUsedSubdomains, NumberOfAtomsPerSubdomain
   
-  IF (nSubdomainsX <= 0 .OR. nSubdomainsY <= 0 .OR. nSubdomainsZ <= 0) THEN
+  IF (ParameterNumberOfSubdomainsX <= 0 .OR. ParameterNumberOfSubdomainsY <= 0 .OR. ParameterNumberOfSubdomainsZ <= 0) THEN
     GetNumberOfUsedSubdomains = HUGE(GetNumberOfUsedSubdomains)
     RETURN
   ENDIF
   
-  NumberOfAtomsPerSubdomainX = CEILING(DBLE(NumberOfAtomsX) / nSubdomainsX)
-  NumberOfAtomsPerSubdomainY = CEILING(DBLE(NumberOfAtomsY) / nSubdomainsY)
-  NumberOfAtomsPerSubdomainZ = CEILING(DBLE(NumberOfAtomsZ) / nSubdomainsZ)
+  NumberOfAtomsPerSubdomainX = CEILING(DBLE(NumberOfAtomsX) / ParameterNumberOfSubdomainsX)
+  NumberOfAtomsPerSubdomainY = CEILING(DBLE(NumberOfAtomsY) / ParameterNumberOfSubdomainsY)
+  NumberOfAtomsPerSubdomainZ = CEILING(DBLE(NumberOfAtomsZ) / ParameterNumberOfSubdomainsZ)
   NumberOfAtomsPerSubdomain = NumberOfAtomsPerSubdomainX*NumberOfAtomsPerSubdomainY*NumberOfAtomsPerSubdomainX
 
   ! decrease number of subdomains to exclude now empty subdomains
-  nEmptySubdomainsX = FLOOR(DBLE(NumberOfAtomsPerSubdomainX*nSubdomainsX - NumberOfAtomsX) / NumberOfAtomsPerSubdomainX)
-  nEmptySubdomainsY = FLOOR(DBLE(NumberOfAtomsPerSubdomainY*nSubdomainsY - NumberOfAtomsY) / NumberOfAtomsPerSubdomainY)
-  nEmptySubdomainsZ = FLOOR(DBLE(NumberOfAtomsPerSubdomainZ*nSubdomainsZ - NumberOfAtomsZ) / NumberOfAtomsPerSubdomainZ)
+  nEmptySubdomainsX = FLOOR(DBLE(NumberOfAtomsPerSubdomainX*ParameterNumberOfSubdomainsX - NumberOfAtomsX) &
+    & / NumberOfAtomsPerSubdomainX)
+  nEmptySubdomainsY = FLOOR(DBLE(NumberOfAtomsPerSubdomainY*ParameterNumberOfSubdomainsY - NumberOfAtomsY) &
+    & / NumberOfAtomsPerSubdomainY)
+  nEmptySubdomainsZ = FLOOR(DBLE(NumberOfAtomsPerSubdomainZ*ParameterNumberOfSubdomainsZ - NumberOfAtomsZ) &
+    & / NumberOfAtomsPerSubdomainZ)
 
-  nEmptySubdomains = nSubdomainsX*nSubdomainsY*nSubdomainsZ &
-    & - (nSubdomainsX-nEmptySubdomainsX)*(nSubdomainsY-nEmptySubdomainsY)*(nSubdomainsZ-nEmptySubdomainsZ)
+  nEmptySubdomains = ParameterNumberOfSubdomainsX*ParameterNumberOfSubdomainsY*ParameterNumberOfSubdomainsZ &
+    & - (ParameterNumberOfSubdomainsX-nEmptySubdomainsX)*(ParameterNumberOfSubdomainsY-nEmptySubdomainsY) &
+    & * (ParameterNumberOfSubdomainsZ-nEmptySubdomainsZ)
 
-  NumberOfSubdomainsX = nSubdomainsX - nEmptySubdomainsX
-  NumberOfSubdomainsY = nSubdomainsY - nEmptySubdomainsY
-  NumberOfSubdomainsZ = nSubdomainsZ - nEmptySubdomainsZ
+  NumberOfSubdomainsX = ParameterNumberOfSubdomainsX - nEmptySubdomainsX
+  NumberOfSubdomainsY = ParameterNumberOfSubdomainsY - nEmptySubdomainsY
+  NumberOfSubdomainsZ = ParameterNumberOfSubdomainsZ - nEmptySubdomainsZ
   nSubdomains = NumberOfSubdomainsX*NumberOfSubdomainsY*NumberOfSubdomainsZ
 
   GetNumberOfUsedSubdomains = nSubdomains
@@ -1827,7 +1754,7 @@ END FUNCTION GetNumberOfUsedSubdomains
 SUBROUTINE ComputeSubdomainsWithAtoms()
   REAL(CMISSDP) :: OptimalSideLength
   INTEGER(CMISSIntg) :: NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, NumberOfAtoms
-  REAL(CMISSDP) :: nSubdomainsXFloat, nSubdomainsYFloat, nSubdomainsZFloat
+  REAL(CMISSDP) :: NumberOfSubdomainsXFloat, NumberOfSubdomainsYFloat, NumberOfSubdomainsZFloat
   REAL(CMISSDP) :: DiffX, DiffY, DiffZ
   INTEGER(CMISSIntg) :: NumberOfAtomsPerSubdomain, nUnusedSubdomains
   INTEGER(CMISSIntg) :: nEmptySubdomainsX, nEmptySubdomainsY, nEmptySubdomainsZ, nEmptySubdomains
@@ -1841,6 +1768,75 @@ SUBROUTINE ComputeSubdomainsWithAtoms()
   
   IF (DEBUGGING) DEBUGGING = (ComputationalNodeNumber == 0)  
   
+  ! Test if a valid domain decomposition was specified via parameters NumberOfElementsInSubdomainXYZ and NumberOfSubdomainsXYZ
+  ! if yes, use this domain decomposition and return, if not, control proceeds to computing the domain decomposition from paraameters of "atom" sizes
+  IF (NumberOfElementsInSubdomainX /= 0 .AND. NumberOfElementsInSubdomainY /= 0 .AND. NumberOfElementsInSubdomainZ /= 0) THEN
+    
+    ! if specified number of subdomains does not match number of processes
+    IF (NumberOfSubdomainsX * NumberOfSubdomainsY * NumberOfSubdomainsZ /= NumberOfComputationalNodes) THEN
+      
+      IF (ComputationalNodeNumber == 0) THEN
+        PRINT *, "The specified number of subdomains ",NumberOfSubdomainsX, "x", NumberOfSubdomainsY, "x", NumberOfSubdomainsZ, & 
+          & " = ", NumberOfSubdomainsX*NumberOfSubdomainsY*NumberOfSubdomainsZ, " does not match the number of processes (", &
+          & NumberOfComputationalNodes,"). Now the domain decomposition is computed from atom sizes."
+      ENDIF 
+    ELSE
+      ! number of subdomains does match number of processes, take the specified domain decomposition
+
+      IF (NumberOfElementsInSubdomainX*NumberOfElementsInSubdomainY*NumberOfElementsInSubdomainZ*NumberOfComputationalNodes &
+        & /= NumberGlobalXElements*NumberGlobalYElements*NumberGlobalZElements) THEN
+
+        IF (ComputationalNodeNumber == 0) THEN
+          PRINT *, "The specified number of 3D elements per subdomain e=",NumberOfElementsInSubdomainX, "x", &
+            & NumberOfElementsInSubdomainY, "x", NumberOfElementsInSubdomainZ, " * number of subdomains (", &
+            & NumberOfComputationalNodes,"), p=",NumberOfSubdomainsX, "x", NumberOfSubdomainsY, "x", NumberOfSubdomainsZ, &
+            & " does not match the total number of 3D elements (", &
+            & NumberGlobalXElements*NumberGlobalYElements*NumberGlobalZElements, &
+            & "). Now the domain decomposition is computed from atom sizes."
+        ENDIF 
+      ELSE
+        ! The following global variables are used later in the code to assign elements to domains and therefore need to be set here:
+        ! NumberOfSubdomainsXYZ, NumberOfAtomsPerSubdomainXYZ, NumberOfAtomsLastSubdomainXYZ, NumberOfElementsInAtomXYZ, NumberOfElementsLastAtomXYZ
+
+        ! For this approach without given "atom" sizes, set the atom size to be of size 1 element
+
+        ! NumberOfSubdomainsXYZ: already set as parameter and checked, that it is valid
+
+        ! NumberOfAtomsPerSubdomainXYZ
+        NumberOfAtomsPerSubdomainX = NumberOfElementsInSubdomainX
+        NumberOfAtomsPerSubdomainY = NumberOfElementsInSubdomainY
+        NumberOfAtomsPerSubdomainZ = NumberOfElementsInSubdomainZ
+
+        ! NumberOfAtomsLastSubdomainXYZ
+        NumberOfAtomsLastSubdomainX = NumberOfAtomsPerSubdomainX
+        NumberOfAtomsLastSubdomainY = NumberOfAtomsPerSubdomainY
+        NumberOfAtomsLastSubdomainZ = NumberOfAtomsPerSubdomainZ
+
+        ! NumberOfElementsInAtomXYZ
+        ! set atom sizes to 1
+        NumberOfElementsInAtomX = 1
+        NumberOfElementsInAtomY = 1
+        NumberOfElementsInAtomZ = 1
+
+        ! NumberOfElementsLastAtomXYZ
+        NumberOfElementsLastAtomX = 1
+        NumberOfElementsLastAtomY = 1
+        NumberOfElementsLastAtomZ = 1
+
+        IF (ComputationalNodeNumber == 0) THEN
+          PRINT *, "Using given domain decomposition."
+        ENDIF
+
+        RETURN
+      ENDIF
+    ENDIF
+
+  ENDIF
+
+
+  ! The following global variables are used later in the code to assign elements to domains and therefore need to be set here:
+  ! NumberOfSubdomainsXYZ, NumberOfAtomsPerSubdomainXYZ, NumberOfAtomsLastSubdomainXYZ, NumberOfElementsInAtomXYZ, NumberOfElementsLastAtomXYZ
+
   ! Domain decomposition for the 3D finite elasticity mesh is computed as follows: 
   ! The user can specify the size of an 'atomic' cuboid, e.g. with ax*ay*az elements. These 'atoms' then must not be split to multiple processors.
   ! In that way it is possibile to forbid the subdivision of a 1D fibre mesh to multiple processes, or to restrict it to only 2 processes per fibre.
@@ -1867,10 +1863,10 @@ SUBROUTINE ComputeSubdomainsWithAtoms()
   ! subdomain = all the atoms that belong to one process
   ! determine number of subdomains in each direction, such that domains are equally sized
 
-  ! nSubdomainsXFloat = NumberGlobalXElements / OptimalSideLength
-  ! nSubdomainsYFloat = NumberGlobalYElements / OptimalSideLength
-  ! nSubdomainsZFloat = NumberGlobalZElements / OptimalSideLength
-  ! nSubdomains = nSubdomainsXFloat * nSubdomainsYFloat * nSubdomainsZFloat 
+  ! NumberOfSubdomainsXFloat = NumberGlobalXElements / OptimalSideLength
+  ! NumberOfSubdomainsYFloat = NumberGlobalYElements / OptimalSideLength
+  ! NumberOfSubdomainsZFloat = NumberGlobalZElements / OptimalSideLength
+  ! nSubdomains = NumberOfSubdomainsXFloat * NumberOfSubdomainsYFloat * NumberOfSubdomainsZFloat 
   !         = NumberGlobalXElements * NumberGlobalYElements * NumberGlobalZElements / (OptimalSideLength)**3
   !         = NumberOfElementsFE / OptimalSideLength**3
   ! => OptimalSideLength = (NumberOfElementsFE / nSubdomains)**(1./3)
@@ -1882,94 +1878,106 @@ SUBROUTINE ComputeSubdomainsWithAtoms()
   
   IF (DBLE(NumberGlobalZElements) / OptimalSideLength > NumberOfAtomsZ - 1e-3) THEN
       
-    nSubdomainsZFloat = MIN(DBLE(NumberGlobalZElements) / OptimalSideLength, DBLE(NumberOfAtomsZ))
+    NumberOfSubdomainsZFloat = MIN(DBLE(NumberGlobalZElements) / OptimalSideLength, DBLE(NumberOfAtomsZ))
     
     IF (DEBUGGING) PRINT *, "YES, NumberOfAtomsZ =", NumberOfAtomsZ, ", OptimalSideLength =",OptimalSideLength,", z=",&
-       & NumberGlobalZElements, ", z/Opt=", DBLE(NumberGlobalZElements) / OptimalSideLength, ", nSubdomainsZFloat=", &
-       & nSubdomainsZFloat
+       & NumberGlobalZElements, ", z/Opt=", DBLE(NumberGlobalZElements) / OptimalSideLength, ", NumberOfSubdomainsZFloat=", &
+       & NumberOfSubdomainsZFloat
 
-    OptimalSideLength = SQRT(nSubdomainsZFloat * NumberGlobalXElements * NumberGlobalYElements / PretendedNumberOfDomains)
+    OptimalSideLength = SQRT(NumberOfSubdomainsZFloat * NumberGlobalXElements * NumberGlobalYElements / PretendedNumberOfDomains)
     IF (DEBUGGING) PRINT *, "new OptimalSideLength=", OptimalSideLength
     
-    nSubdomainsYFloat = MIN(DBLE(NumberGlobalYElements) / OptimalSideLength, DBLE(NumberOfAtomsY))
+    NumberOfSubdomainsYFloat = MIN(DBLE(NumberGlobalYElements) / OptimalSideLength, DBLE(NumberOfAtomsY))
     IF (DEBUGGING) PRINT *, "NumberOfAtomsY=", NumberOfAtomsY, ", OptimalSideLength=",OptimalSideLength,", y=",&
-      & NumberGlobalYElements, ", y/Opt=", DBLE(NumberGlobalYElements) / OptimalSideLength, ", nSubdomainsyFloat=", &
-      & nSubdomainsYFloat
+      & NumberGlobalYElements, ", y/Opt=", DBLE(NumberGlobalYElements) / OptimalSideLength, ", NumberOfSubdomainsYFloat=", &
+      & NumberOfSubdomainsYFloat
 
-    nSubdomainsXFloat = MIN(DBLE(PretendedNumberOfDomains) / (nSubdomainsZFloat * nSubdomainsYFloat), DBLE(NumberOfAtomsX))
-    IF (DEBUGGING) PRINT *, "NumberOfAtomsX=", NumberOfAtomsX, ", nSubdomainsXFloat=", &
-       & DBLE(PretendedNumberOfDomains) / (nSubdomainsZFloat * nSubdomainsYFloat), ", final: ", nSubdomainsXFloat
+    NumberOfSubdomainsXFloat = MIN(DBLE(PretendedNumberOfDomains) / (NumberOfSubdomainsZFloat * NumberOfSubdomainsYFloat), &
+      & DBLE(NumberOfAtomsX))
+    IF (DEBUGGING) PRINT *, "NumberOfAtomsX=", NumberOfAtomsX, ", NumberOfSubdomainsXFloat=", &
+       & DBLE(PretendedNumberOfDomains) / (NumberOfSubdomainsZFloat * NumberOfSubdomainsYFloat), ", final: ", &
+       & NumberOfSubdomainsXFloat
     
   ! begin partioning in x direction
   ELSE
     
-    nSubdomainsXFloat = MIN(DBLE(NumberGlobalXElements) / OptimalSideLength, DBLE(NumberOfAtomsX))
-    ! now IF nAtomX is smaller than the optimal nSubdomainsXFloat, we must take nAtomX instead
-    ! nSubdomainsXFloat is given
-    ! nSubdomainsYFloat = NumberGlobalYElements / OptimalSideLength
-    ! nSubdomainsZFloat = NumberGlobalZElements / OptimalSideLength
-    ! nSubdomains = nSubdomainsXFloat * nSubdomainsYFloat * nSubdomainsZFloat 
-    !         = nSubdomainsXFloat * NumberGlobalYElements * NumberGlobalZElements / (OptimalSideLength)**2
-    ! => OptimalSideLength = (nSubdomainsXFloat * NumberGlobalYElements * NumberGlobalZElements / nSubdomains)**(1./2)
+    NumberOfSubdomainsXFloat = MIN(DBLE(NumberGlobalXElements) / OptimalSideLength, DBLE(NumberOfAtomsX))
+    ! now IF nAtomX is smaller than the optimal NumberOfSubdomainsXFloat, we must take nAtomX instead
+    ! NumberOfSubdomainsXFloat is given
+    ! NumberOfSubdomainsYFloat = NumberGlobalYElements / OptimalSideLength
+    ! NumberOfSubdomainsZFloat = NumberGlobalZElements / OptimalSideLength
+    ! nSubdomains = NumberOfSubdomainsXFloat * NumberOfSubdomainsYFloat * NumberOfSubdomainsZFloat 
+    !         = NumberOfSubdomainsXFloat * NumberGlobalYElements * NumberGlobalZElements / (OptimalSideLength)**2
+    ! => OptimalSideLength = (NumberOfSubdomainsXFloat * NumberGlobalYElements * NumberGlobalZElements / nSubdomains)**(1./2)
     ! 
 
     IF (DEBUGGING) PRINT *, "NO, NumberOfAtomsX =", NumberOfAtomsX, ", OptimalSideLength =",OptimalSideLength,", x=",&
-       & NumberGlobalXElements, ", x/Opt=", DBLE(NumberGlobalXElements) / OptimalSideLength, ", nSubdomainsXFloat=", &
-       & nSubdomainsXFloat
+       & NumberGlobalXElements, ", x/Opt=", DBLE(NumberGlobalXElements) / OptimalSideLength, ", NumberOfSubdomainsXFloat=", &
+       & NumberOfSubdomainsXFloat
 
-    OptimalSideLength = SQRT(nSubdomainsXFloat * NumberGlobalYElements * NumberGlobalZElements / PretendedNumberOfDomains)
-    IF (DEBUGGING) PRINT *, "new OptimalSideLength=", OptimalSideLength, "=sqrt(",nSubdomainsXFloat," * ",&
+    OptimalSideLength = SQRT(NumberOfSubdomainsXFloat * NumberGlobalYElements * NumberGlobalZElements / PretendedNumberOfDomains)
+    IF (DEBUGGING) PRINT *, "new OptimalSideLength=", OptimalSideLength, "=sqrt(",NumberOfSubdomainsXFloat," * ",&
       & NumberGlobalYElements," * ",NumberGlobalZElements,")/",PretendedNumberOfDomains
 
-    nSubdomainsYFloat = MIN(DBLE(NumberGlobalYElements) / OptimalSideLength, DBLE(NumberOfAtomsY))
+    NumberOfSubdomainsYFloat = MIN(DBLE(NumberGlobalYElements) / OptimalSideLength, DBLE(NumberOfAtomsY))
     IF (DEBUGGING) PRINT *, "NumberOfAtomsY=", NumberOfAtomsY, ", OptimalSideLength=",OptimalSideLength,", y=",&
-      & NumberGlobalYElements, ", y/Opt=", DBLE(NumberGlobalYElements) / OptimalSideLength, ", nSubdomainsyFloat=", &
-      & nSubdomainsYFloat
+      & NumberGlobalYElements, ", y/Opt=", DBLE(NumberGlobalYElements) / OptimalSideLength, ", NumberOfSubdomainsYFloat=", &
+      & NumberOfSubdomainsYFloat
 
-    ! now IF nAtomY is smaller than the optimal nSubdomainsYFloat, take NumberOfAtomsY
-    ! nSubdomainsXFloat .AND. nSubdomainsYFloat are given
-    ! nSubdomainsZFloat = NumberGlobalZElements / OptimalSideLength
-    ! nSubdomains = nSubdomainsXFloat * nSubdomainsYFloat * nSubdomainsZFloat
-    !         = nSubdomainsXFloat * nSubdomainsYFloat * NumberGlobalZElements / OptimalSideLength
-    ! => OptimalSideLength = nSubdomainsXFloat * nSubdomainsYFloat * NumberGlobalZElements / nSubdomains
-    ! nSubdomainsZFloat = NumberGlobalZElements / (nSubdomainsXFloat * nSubdomainsYFloat * NumberGlobalZElements / nSubdomains)
-    !               = (NumberGlobalZElements * nSubdomains) / (nSubdomainsXFloat * nSubdomainsYFloat * NumberGlobalZElements)
-    !               = nSubdomains / (nSubdomainsXFloat * nSubdomainsYFloat)
+    ! now IF nAtomY is smaller than the optimal NumberOfSubdomainsYFloat, take NumberOfAtomsY
+    ! NumberOfSubdomainsXFloat .AND. NumberOfSubdomainsYFloat are given
+    ! NumberOfSubdomainsZFloat = NumberGlobalZElements / OptimalSideLength
+    ! nSubdomains = NumberOfSubdomainsXFloat * NumberOfSubdomainsYFloat * NumberOfSubdomainsZFloat
+    !         = NumberOfSubdomainsXFloat * NumberOfSubdomainsYFloat * NumberGlobalZElements / OptimalSideLength
+    ! => OptimalSideLength = NumberOfSubdomainsXFloat * NumberOfSubdomainsYFloat * NumberGlobalZElements / nSubdomains
+    ! NumberOfSubdomainsZFloat = NumberGlobalZElements / (NumberOfSubdomainsXFloat * NumberOfSubdomainsYFloat * NumberGlobalZElements / nSubdomains)
+    !               = (NumberGlobalZElements * nSubdomains) / (NumberOfSubdomainsXFloat * NumberOfSubdomainsYFloat * NumberGlobalZElements)
+    !               = nSubdomains / (NumberOfSubdomainsXFloat * NumberOfSubdomainsYFloat)
     !
      
-    nSubdomainsZFloat = MIN(DBLE(PretendedNumberOfDomains) / (nSubdomainsXFloat * nSubdomainsYFloat), DBLE(NumberOfAtomsZ))
+    NumberOfSubdomainsZFloat = MIN(DBLE(PretendedNumberOfDomains) / (NumberOfSubdomainsXFloat * NumberOfSubdomainsYFloat), &
+      & DBLE(NumberOfAtomsZ))
 
-    IF (DEBUGGING) PRINT *, "NumberOfAtomsZ=", NumberOfAtomsZ, ", nSubdomainsZFloat=", &
-       & DBLE(PretendedNumberOfDomains) / (nSubdomainsXFloat * nSubdomainsYFloat), ", final: ", nSubdomainsZFloat
+    IF (DEBUGGING) PRINT *, "NumberOfAtomsZ=", NumberOfAtomsZ, ", NumberOfSubdomainsZFloat=", &
+       & DBLE(PretendedNumberOfDomains) / (NumberOfSubdomainsXFloat * NumberOfSubdomainsYFloat), ", final: ", &
+       & NumberOfSubdomainsZFloat
   ENDIF
        
-  IF (DEBUGGING) PRINT *, "nSubdomainsFloat=", nSubdomainsXFloat,nSubdomainsYFloat,nSubdomainsZFloat,"=",&
-    & nSubdomainsXFloat*nSubdomainsYFloat*nSubdomainsZFloat
+  IF (DEBUGGING) PRINT *, "nSubdomainsFloat=", NumberOfSubdomainsXFloat,NumberOfSubdomainsYFloat,NumberOfSubdomainsZFloat,"=",&
+    & NumberOfSubdomainsXFloat*NumberOfSubdomainsYFloat*NumberOfSubdomainsZFloat
 
-  nSubdomainsX = MAX(1, CEILING(nSubdomainsXFloat))     ! try to round up to use the maximum number of processes possible, if value gets to high, it will be decreased anyway
-  nSubdomainsY = MAX(1, CEILING(nSubdomainsYFloat))
-  nSubdomainsZ = MAX(1, CEILING(nSubdomainsZFloat))
+  NumberOfSubdomainsX = MAX(1, CEILING(NumberOfSubdomainsXFloat))     ! try to round up to use the maximum number of processes possible, if value gets to high, it will be decreased anyway
+  NumberOfSubdomainsY = MAX(1, CEILING(NumberOfSubdomainsYFloat))
+  NumberOfSubdomainsZ = MAX(1, CEILING(NumberOfSubdomainsZFloat))
 
-  IF (DEBUGGING) PRINT *, "nSubdomains: ",nSubdomainsX, nSubdomainsY, nSubdomainsZ, "=", nSubdomainsX*nSubdomainsY*nSubdomainsZ
+  IF (DEBUGGING) PRINT *, "nSubdomains: ",NumberOfSubdomainsX, NumberOfSubdomainsY, NumberOfSubdomainsZ, "=", &
+    & NumberOfSubdomainsX*NumberOfSubdomainsY*NumberOfSubdomainsZ
 
   ! adjust number of subdomains such that total number is <= number of domains (ideally '=')
   
-  IF (GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, nSubdomainsX, nSubdomainsY, nSubdomainsZ) &
-     & > PretendedNumberOfDomains) THEN
+  IF (GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, NumberOfSubdomainsX, NumberOfSubdomainsY, &
+     & NumberOfSubdomainsZ) > PretendedNumberOfDomains) THEN
     DiffNumberOfDomainsXDecreased = PretendedNumberOfDomains - &
-      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, nSubdomainsX-1, nSubdomainsY, nSubdomainsZ)
+      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, NumberOfSubdomainsX-1, NumberOfSubdomainsY, &
+      & NumberOfSubdomainsZ)
     DiffNumberOfDomainsYDecreased = PretendedNumberOfDomains - &
-      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, nSubdomainsX, nSubdomainsY-1, nSubdomainsZ)
+      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, NumberOfSubdomainsX, NumberOfSubdomainsY-1, &
+      & NumberOfSubdomainsZ)
     DiffNumberOfDomainsZDecreased = PretendedNumberOfDomains - &
-      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, nSubdomainsX, nSubdomainsY, nSubdomainsZ-1)
+      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, NumberOfSubdomainsX, NumberOfSubdomainsY, &
+      & NumberOfSubdomainsZ-1)
     DiffNumberOfDomainsXYDecreased = PretendedNumberOfDomains - &
-      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, nSubdomainsX-1, nSubdomainsY-1, nSubdomainsZ)
+      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, NumberOfSubdomainsX-1, NumberOfSubdomainsY-1, &
+      & NumberOfSubdomainsZ)
     DiffNumberOfDomainsXZDecreased = PretendedNumberOfDomains - &
-      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, nSubdomainsX-1, nSubdomainsY, nSubdomainsZ-1)
+      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, NumberOfSubdomainsX-1, NumberOfSubdomainsY, &
+      & NumberOfSubdomainsZ-1)
     DiffNumberOfDomainsYZDecreased = PretendedNumberOfDomains - &
-      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, nSubdomainsX, nSubdomainsY-1, nSubdomainsZ-1)
+      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, NumberOfSubdomainsX, NumberOfSubdomainsY-1, &
+      & NumberOfSubdomainsZ-1)
     DiffNumberOfDomainsXYZDecreased = PretendedNumberOfDomains - &
-      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, nSubdomainsX-1, nSubdomainsY-1, nSubdomainsZ-1)
+      & GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, NumberOfSubdomainsX-1, NumberOfSubdomainsY-1, &
+      & NumberOfSubdomainsZ-1)
 
     IF (DiffNumberOfDomainsXDecreased < 0) DiffNumberOfDomainsXDecreased = HUGE(DiffNumberOfDomainsXDecreased)
     IF (DiffNumberOfDomainsYDecreased < 0) DiffNumberOfDomainsYDecreased = HUGE(DiffNumberOfDomainsYDecreased)
@@ -1990,135 +1998,136 @@ SUBROUTINE ComputeSubdomainsWithAtoms()
       
     IF (MinDiffNumberOfDomains == DiffNumberOfDomainsXDecreased .AND. MinDiffNumberOfDomains /= HUGE(MinDiffNumberOfDomains)) THEN
       IF (DEBUGGING) PRINT *, "best to decrease X by 1"
-      nSubdomainsX = nSubdomainsX-1
+      NumberOfSubdomainsX = NumberOfSubdomainsX-1
     ELSEIF (MinDiffNumberOfDomains == DiffNumberOfDomainsYDecreased .AND. MinDiffNumberOfDomains /= HUGE(MinDiffNumberOfDomains)) &
     & THEN
       IF (DEBUGGING) PRINT *, "best to decrease Y by 1"
-      nSubdomainsY = nSubdomainsY-1
+      NumberOfSubdomainsY = NumberOfSubdomainsY-1
     ELSEIF (MinDiffNumberOfDomains == DiffNumberOfDomainsZDecreased .AND. MinDiffNumberOfDomains /= HUGE(MinDiffNumberOfDomains)) &
     & THEN
       IF (DEBUGGING) PRINT *, "best to decrease Z by 1"
-      nSubdomainsZ = nSubdomainsZ-1
+      NumberOfSubdomainsZ = NumberOfSubdomainsZ-1
     ELSEIF (MinDiffNumberOfDomains == DiffNumberOfDomainsXYDecreased .AND. MinDiffNumberOfDomains /= HUGE(MinDiffNumberOfDomains)) &
     & THEN
       IF (DEBUGGING) PRINT *, "best to decrease X and Y by 1"
-      nSubdomainsX = nSubdomainsX-1
-      nSubdomainsY = nSubdomainsY-1
+      NumberOfSubdomainsX = NumberOfSubdomainsX-1
+      NumberOfSubdomainsY = NumberOfSubdomainsY-1
     ELSEIF (MinDiffNumberOfDomains == DiffNumberOfDomainsXZDecreased .AND. MinDiffNumberOfDomains /= HUGE(MinDiffNumberOfDomains)) &
     & THEN
       IF (DEBUGGING) PRINT *, "best to decrease X and Z by 1"
-      nSubdomainsX = nSubdomainsX-1
-      nSubdomainsZ = nSubdomainsZ-1
+      NumberOfSubdomainsX = NumberOfSubdomainsX-1
+      NumberOfSubdomainsZ = NumberOfSubdomainsZ-1
     ELSEIF (MinDiffNumberOfDomains == DiffNumberOfDomainsYZDecreased .AND. MinDiffNumberOfDomains /= HUGE(MinDiffNumberOfDomains)) &
     & THEN
       IF (DEBUGGING) PRINT *, "best to decrease Y and Z by 1"
-      nSubdomainsY = nSubdomainsY-1
-      nSubdomainsZ = nSubdomainsZ-1
+      NumberOfSubdomainsY = NumberOfSubdomainsY-1
+      NumberOfSubdomainsZ = NumberOfSubdomainsZ-1
     ELSEIF (MinDiffNumberOfDomains == DiffNumberOfDomainsXYZDecreased .AND. MinDiffNumberOfDomains /= HUGE(MinDiffNumberOfDomains & 
     )) THEN
       IF (DEBUGGING) PRINT *, "best to decrease X, Y and Z by 1"
-      nSubdomainsX = nSubdomainsX-1
-      nSubdomainsY = nSubdomainsY-1
-      nSubdomainsZ = nSubdomainsZ-1
+      NumberOfSubdomainsX = NumberOfSubdomainsX-1
+      NumberOfSubdomainsY = NumberOfSubdomainsY-1
+      NumberOfSubdomainsZ = NumberOfSubdomainsZ-1
     ELSE
       IF (DEBUGGING) PRINT *, "it does not help to decrease X,Y or Z by 1, start iterative procedure"
-      DO WHILE (GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, nSubdomainsX, nSubdomainsY, &
-        & nSubdomainsZ) > PretendedNumberOfDomains)
-        DiffX = nSubdomainsX - nSubdomainsXFloat
-        DiffY = nSubdomainsY - nSubdomainsYFloat
-        DiffZ = nSubdomainsZ - nSubdomainsZFloat
+      DO WHILE (GetNumberOfUsedSubdomains(NumberOfAtomsX, NumberOfAtomsY, NumberOfAtomsZ, NumberOfSubdomainsX, &
+        & NumberOfSubdomainsY, NumberOfSubdomainsZ) > PretendedNumberOfDomains)
+        DiffX = NumberOfSubdomainsX - NumberOfSubdomainsXFloat
+        DiffY = NumberOfSubdomainsY - NumberOfSubdomainsYFloat
+        DiffZ = NumberOfSubdomainsZ - NumberOfSubdomainsZFloat
         
         IF (DiffX >= DiffY .AND. DiffX >= DiffZ) THEN
-          IF (nSubdomainsX /= 1) THEN
-            nSubdomainsX = nSubdomainsX - 1
+          IF (NumberOfSubdomainsX /= 1) THEN
+            NumberOfSubdomainsX = NumberOfSubdomainsX - 1
           ELSEIF (DiffY >= DiffZ) THEN
-            IF (nSubdomainsY /= 1) THEN
-              nSubdomainsY = nSubdomainsY - 1
+            IF (NumberOfSubdomainsY /= 1) THEN
+              NumberOfSubdomainsY = NumberOfSubdomainsY - 1
             ELSE
-              nSubdomainsZ = nSubdomainsZ - 1
+              NumberOfSubdomainsZ = NumberOfSubdomainsZ - 1
             ENDIF
           ELSE
-            IF (nSubdomainsZ /= 1) THEN
-              nSubdomainsZ = nSubdomainsZ - 1
+            IF (NumberOfSubdomainsZ /= 1) THEN
+              NumberOfSubdomainsZ = NumberOfSubdomainsZ - 1
             ELSE
-              nSubdomainsY = nSubdomainsY - 1
+              NumberOfSubdomainsY = NumberOfSubdomainsY - 1
             ENDIF
           ENDIF
               
         ELSEIF (DiffY >= DiffZ) THEN    ! DiffY >= DiffZ, DiffY > DiffX
-          IF (nSubdomainsY /= 1) THEN
-            nSubdomainsY = nSubdomainsY - 1
+          IF (NumberOfSubdomainsY /= 1) THEN
+            NumberOfSubdomainsY = NumberOfSubdomainsY - 1
           ELSE
             IF (DiffX >= DiffZ) THEN
-              IF (nSubdomainsX /= 1) THEN
-                nSubdomainsX = nSubdomainsX - 1
+              IF (NumberOfSubdomainsX /= 1) THEN
+                NumberOfSubdomainsX = NumberOfSubdomainsX - 1
               ELSE
-                nSubdomainsZ = nSubdomainsZ - 1
+                NumberOfSubdomainsZ = NumberOfSubdomainsZ - 1
               ENDIF
             ELSE
-              IF (nSubdomainsZ /= 1) THEN
-                nSubdomainsZ = nSubdomainsZ - 1
+              IF (NumberOfSubdomainsZ /= 1) THEN
+                NumberOfSubdomainsZ = NumberOfSubdomainsZ - 1
               ELSE
-                nSubdomainsX = nSubdomainsX - 1
+                NumberOfSubdomainsX = NumberOfSubdomainsX - 1
               ENDIF
             ENDIF
           ENDIF
       
         ELSE       ! DiffZ > DiffY, DiffZ >= DiffX
-          IF (nSubdomainsZ /= 1) THEN
-            nSubdomainsZ = nSubdomainsZ - 1
+          IF (NumberOfSubdomainsZ /= 1) THEN
+            NumberOfSubdomainsZ = NumberOfSubdomainsZ - 1
           ELSE
             IF (DiffX >= DiffY) THEN
-              IF (nSubdomainsX /= 1) THEN
-                nSubdomainsX = nSubdomainsX - 1
+              IF (NumberOfSubdomainsX /= 1) THEN
+                NumberOfSubdomainsX = NumberOfSubdomainsX - 1
               ELSE
-                nSubdomainsY = nSubdomainsY - 1
+                NumberOfSubdomainsY = NumberOfSubdomainsY - 1
               ENDIF
             ELSE
-              IF (nSubdomainsY /= 1) THEN
-                nSubdomainsY = nSubdomainsY - 1
+              IF (NumberOfSubdomainsY /= 1) THEN
+                NumberOfSubdomainsY = NumberOfSubdomainsY - 1
               ELSE
-                nSubdomainsX = nSubdomainsX - 1
+                NumberOfSubdomainsX = NumberOfSubdomainsX - 1
               ENDIF
             ENDIF
           ENDIF
         ENDIF
           
-        IF (DEBUGGING) PRINT *, "Diff: ", DiffX,DiffY,DiffZ, ", nSubdomains:",nSubdomainsX, nSubdomainsY, nSubdomainsZ, "=", &
-          & nSubdomainsX*nSubdomainsY*nSubdomainsZ
+        IF (DEBUGGING) PRINT *, "Diff: ", DiffX,DiffY,DiffZ, ", nSubdomains:",NumberOfSubdomainsX, NumberOfSubdomainsY, &
+          & NumberOfSubdomainsZ, "=", NumberOfSubdomainsX*NumberOfSubdomainsY*NumberOfSubdomainsZ
       ENDDO
     ENDIF  
   ENDIF
   
   
-  IF (DEBUGGING) PRINT *, "nSubdomains: ",nSubdomainsX, nSubdomainsY, nSubdomainsZ, "=", nSubdomainsX*nSubdomainsY*nSubdomainsZ
+  IF (DEBUGGING) PRINT *, "nSubdomains: ",NumberOfSubdomainsX, NumberOfSubdomainsY, NumberOfSubdomainsZ, "=", &
+    &  NumberOfSubdomainsX*NumberOfSubdomainsY*NumberOfSubdomainsZ
 
   ! determine shape of subdomain, i.e. NumberOfAtomsPerSubdomain
-  ! NumberOfAtomsPerSubdomainX * nSubdomainsX = NumberOfAtomsX  =>  NumberOfAtomsPerSubdomainX = NumberOfAtomsX / nSubdomainsX
+  ! NumberOfAtomsPerSubdomainX * NumberOfSubdomainsX = NumberOfAtomsX  =>  NumberOfAtomsPerSubdomainX = NumberOfAtomsX / NumberOfSubdomainsX
 
-  NumberOfAtomsPerSubdomainX = CEILING(DBLE(NumberOfAtomsX) / nSubdomainsX)
-  NumberOfAtomsPerSubdomainY = CEILING(DBLE(NumberOfAtomsY) / nSubdomainsY)
-  NumberOfAtomsPerSubdomainZ = CEILING(DBLE(NumberOfAtomsZ) / nSubdomainsZ)
+  NumberOfAtomsPerSubdomainX = CEILING(DBLE(NumberOfAtomsX) / NumberOfSubdomainsX)
+  NumberOfAtomsPerSubdomainY = CEILING(DBLE(NumberOfAtomsY) / NumberOfSubdomainsY)
+  NumberOfAtomsPerSubdomainZ = CEILING(DBLE(NumberOfAtomsZ) / NumberOfSubdomainsZ)
   NumberOfAtomsPerSubdomain = NumberOfAtomsPerSubdomainX*NumberOfAtomsPerSubdomainY*NumberOfAtomsPerSubdomainZ
 
   ! decrease number of subdomains to exclude now empty subdomains
-  nEmptySubdomainsX = FLOOR(DBLE(NumberOfAtomsPerSubdomainX*nSubdomainsX - NumberOfAtomsX) / NumberOfAtomsPerSubdomainX)
-  nEmptySubdomainsY = FLOOR(DBLE(NumberOfAtomsPerSubdomainY*nSubdomainsY - NumberOfAtomsY) / NumberOfAtomsPerSubdomainY)
-  nEmptySubdomainsZ = FLOOR(DBLE(NumberOfAtomsPerSubdomainZ*nSubdomainsZ - NumberOfAtomsZ) / NumberOfAtomsPerSubdomainZ)
+  nEmptySubdomainsX = FLOOR(DBLE(NumberOfAtomsPerSubdomainX*NumberOfSubdomainsX - NumberOfAtomsX) / NumberOfAtomsPerSubdomainX)
+  nEmptySubdomainsY = FLOOR(DBLE(NumberOfAtomsPerSubdomainY*NumberOfSubdomainsY - NumberOfAtomsY) / NumberOfAtomsPerSubdomainY)
+  nEmptySubdomainsZ = FLOOR(DBLE(NumberOfAtomsPerSubdomainZ*NumberOfSubdomainsZ - NumberOfAtomsZ) / NumberOfAtomsPerSubdomainZ)
 
   IF (DEBUGGING) PRINT *, "NumberOfAtomsPerSubdomain: ",NumberOfAtomsPerSubdomainX,NumberOfAtomsPerSubdomainY, &
     & NumberOfAtomsPerSubdomainZ
   
-  nEmptySubdomains = nSubdomainsX*nSubdomainsY*nSubdomainsZ &
-    & - (nSubdomainsX-nEmptySubdomainsX)*(nSubdomainsY-nEmptySubdomainsY)*(nSubdomainsZ-nEmptySubdomainsZ)
+  nEmptySubdomains = NumberOfSubdomainsX*NumberOfSubdomainsY*NumberOfSubdomainsZ &
+    & - (NumberOfSubdomainsX-nEmptySubdomainsX)*(NumberOfSubdomainsY-nEmptySubdomainsY)*(NumberOfSubdomainsZ-nEmptySubdomainsZ)
 
   IF (DEBUGGING) PRINT *, "nEmptySubdomains: ",nEmptySubdomainsX,nEmptySubdomainsY,nEmptySubdomainsZ,&
     & ", total: ",nEmptySubdomains
 
-  nSubdomainsX = nSubdomainsX - nEmptySubdomainsX
-  nSubdomainsY = nSubdomainsY - nEmptySubdomainsY
-  nSubdomainsZ = nSubdomainsZ - nEmptySubdomainsZ
-  nSubdomains = nSubdomainsX*nSubdomainsY*nSubdomainsZ
+  NumberOfSubdomainsX = NumberOfSubdomainsX - nEmptySubdomainsX
+  NumberOfSubdomainsY = NumberOfSubdomainsY - nEmptySubdomainsY
+  NumberOfSubdomainsZ = NumberOfSubdomainsZ - nEmptySubdomainsZ
+  nSubdomains = NumberOfSubdomainsX*NumberOfSubdomainsY*NumberOfSubdomainsZ
 
   nUnusedSubdomains = NumberOfDomains - nSubdomains
   IF (DEBUGGING) PRINT *, "PretendedNumberOfDomains: ", PretendedNumberOfDomains,", nSubdomains:", nSubdomains, &
@@ -2136,29 +2145,34 @@ SUBROUTINE ComputeSubdomainsWithAtoms()
     STOP
   ENDIF
 
+  NumberOfElementsInSubdomainX = NumberOfElementsInAtomX*NumberOfAtomsPerSubdomainX
+  NumberOfElementsInSubdomainY = NumberOfElementsInAtomY*NumberOfAtomsPerSubdomainY
+  NumberOfElementsInSubdomainZ = NumberOfElementsInAtomZ*NumberOfAtomsPerSubdomainZ
+
   IF (DEBUGGING) THEN
     PRINT *, "NumberOfAtomsPerSubdomain: ",NumberOfAtomsPerSubdomainX, NumberOfAtomsPerSubdomainY, NumberOfAtomsPerSubdomainZ, &
       & "=", NumberOfAtomsPerSubdomain
-    PRINT *, "nSubdomains: ",nSubdomainsX, nSubdomainsY, nSubdomainsZ, "=", nSubdomainsX*nSubdomainsY*nSubdomainsZ, &
+    PRINT *, "nSubdomains: ",NumberOfSubdomainsX, NumberOfSubdomainsY, NumberOfSubdomainsZ, "=", &
+      & NumberOfSubdomainsX*NumberOfSubdomainsY*NumberOfSubdomainsZ, &
       & ", NumberOfAtomsPerSubdomain: ", NumberOfAtomsPerSubdomainX,NumberOfAtomsPerSubdomainY,NumberOfAtomsPerSubdomainZ, "=", &
       & NumberOfAtomsPerSubdomain, ", NumberOfElementsInAtom: ", NumberOfElementsInAtomX, NumberOfElementsInAtomY, &
-      & NumberOfElementsInAtomZ, "=", NumberOfElementsInAtomX*NumberOfElementsInAtomY*NumberOfElementsInAtomX,& 
+      & NumberOfElementsInAtomZ, "=", NumberOfElementsInAtomX*NumberOfElementsInAtomY*NumberOfElementsInAtomX, & 
       ", NumberGlobalElements ", NumberGlobalXElements,NumberGlobalYElements,NumberGlobalZElements,"=",&
-      &  NumberGlobalXElements*NumberGlobalYElements,NumberGlobalZElements
+      &  NumberGlobalXElements*NumberGlobalYElements*NumberGlobalZElements
 
-    PRINT *, "subdomain size: ",NumberOfElementsInAtomX*NumberOfAtomsPerSubdomainX,"x",&
-       & NumberOfElementsInAtomY*NumberOfAtomsPerSubdomainY, "x", NumberOfElementsInAtomZ*NumberOfAtomsPerSubdomainZ
-    PRINT *, "total size: ", nSubdomainsX*NumberOfAtomsPerSubdomainX*NumberOfElementsInAtomX, "x",&
-       & nSubdomainsY*NumberOfAtomsPerSubdomainY*NumberOfElementsInAtomY, "x", &
-       & nSubdomainsZ*NumberOfAtomsPerSubdomainZ*NumberOfElementsInAtomZ, & 
+    PRINT *, "subdomain size: ",NumberOfElementsInSubdomainX,"x",&
+       & NumberOfElementsInSubdomainY, "x", NumberOfElementsInSubdomainZ
+    PRINT *, "total size: ", NumberOfSubdomainsX*NumberOfElementsInSubdomainX, "x",&
+       & NumberOfSubdomainsY*NumberOfElementsInSubdomainY, "x", &
+       & NumberOfSubdomainsZ*NumberOfElementsInSubdomainZ, & 
        " >= ", NumberGlobalXElements,"x",NumberGlobalYElements,"x",NumberGlobalZElements
   ENDIF
 
   ! determine last subdomain sizes
-  ! NumberOfAtomsLastSubdomainX = NumberOfAtomsPerSubdomainX - (NumberOfAtomsPerSubdomainX*nSubdomainsX - NumberOfAtomsX)
-  NumberOfAtomsLastSubdomainX = NumberOfAtomsPerSubdomainX*(1-nSubdomainsX) + NumberOfAtomsX
-  NumberOfAtomsLastSubdomainY = NumberOfAtomsPerSubdomainY*(1-nSubdomainsY) + NumberOfAtomsY
-  NumberOfAtomsLastSubdomainZ = NumberOfAtomsPerSubdomainZ*(1-nSubdomainsZ) + NumberOfAtomsZ
+  ! NumberOfAtomsLastSubdomainX = NumberOfAtomsPerSubdomainX - (NumberOfAtomsPerSubdomainX*NumberOfSubdomainsX - NumberOfAtomsX)
+  NumberOfAtomsLastSubdomainX = NumberOfAtomsPerSubdomainX*(1-NumberOfSubdomainsX) + NumberOfAtomsX
+  NumberOfAtomsLastSubdomainY = NumberOfAtomsPerSubdomainY*(1-NumberOfSubdomainsY) + NumberOfAtomsY
+  NumberOfAtomsLastSubdomainZ = NumberOfAtomsPerSubdomainZ*(1-NumberOfSubdomainsZ) + NumberOfAtomsZ
 
   ! NumberOfElementsLastAtomX = NumberOfElementsInAtomX - (NumberOfAtomsX*NumberOfElementsInAtomX - NumberGlobalXElements)
   ! NumberOfElementsLastAtomX = NumberOfElementsInAtomX*(1 - NumberOfAtomsX) + NumberGlobalXElements
@@ -2187,9 +2201,9 @@ SUBROUTINE ComputeSubdomainsWithAtoms()
     *NumberOfAtomsPerSubdomainY*NumberOfElementsInAtomY&
     *NumberOfAtomsPerSubdomainZ*NumberOfElementsInAtomZ
         
-  IF ((nSubdomainsY-1)*(nSubdomainsZ-1) > 0 .AND. actualNumberOfElements < normalNumberOfElements) THEN
-    IF (ComputationalNodeNumber == 0) PRINT *, (nSubdomainsY-1)*(nSubdomainsZ-1), " process(es) on    x+ boundary have ", &
-      & normalNumberOfElements-actualNumberOfElements," elements less (only ", &
+  IF ((NumberOfSubdomainsY-1)*(NumberOfSubdomainsZ-1) > 0 .AND. actualNumberOfElements < normalNumberOfElements) THEN
+    IF (ComputationalNodeNumber == 0) PRINT *, (NumberOfSubdomainsY-1)*(NumberOfSubdomainsZ-1), &
+      & " process(es) on    x+ boundary have ", normalNumberOfElements-actualNumberOfElements," elements less (only ", &
       & 100.*actualNumberOfElements/normalNumberOfElements,"%)"
   ENDIF
         
@@ -2199,9 +2213,9 @@ SUBROUTINE ComputeSubdomainsWithAtoms()
     *((NumberOfAtomsLastSubdomainY-1)*NumberOfElementsInAtomY + NumberOfElementsLastAtomY) &
     *NumberOfAtomsPerSubdomainZ*NumberOfElementsInAtomZ
         
-  IF ((nSubdomainsX-1)*(nSubdomainsZ-1) > 0 .AND. actualNumberOfElements < normalNumberOfElements) THEN
-    IF (ComputationalNodeNumber == 0) PRINT *, (nSubdomainsX-1)*(nSubdomainsZ-1), " process(es) on    y+ boundary have ", &
-      & normalNumberOfElements-actualNumberOfElements," elements less (only ", &
+  IF ((NumberOfSubdomainsX-1)*(NumberOfSubdomainsZ-1) > 0 .AND. actualNumberOfElements < normalNumberOfElements) THEN
+    IF (ComputationalNodeNumber == 0) PRINT *, (NumberOfSubdomainsX-1)*(NumberOfSubdomainsZ-1), &
+      & " process(es) on    y+ boundary have ", normalNumberOfElements-actualNumberOfElements," elements less (only ", &
       & 100.*actualNumberOfElements/normalNumberOfElements,"%)"
   ENDIF
     
@@ -2211,9 +2225,9 @@ SUBROUTINE ComputeSubdomainsWithAtoms()
     *NumberOfAtomsPerSubdomainY*NumberOfElementsInAtomY &
     *((NumberOfAtomsLastSubdomainZ-1)*NumberOfElementsInAtomZ + NumberOfElementsLastAtomZ)
         
-  IF ((nSubdomainsX-1)*(nSubdomainsY-1) > 0 .AND. actualNumberOfElements < normalNumberOfElements) THEN
-    IF (ComputationalNodeNumber == 0) PRINT *, (nSubdomainsX-1)*(nSubdomainsY-1), " process(es) on    z+ boundary have ", &
-      & normalNumberOfElements-actualNumberOfElements," elements less (only ", &
+  IF ((NumberOfSubdomainsX-1)*(NumberOfSubdomainsY-1) > 0 .AND. actualNumberOfElements < normalNumberOfElements) THEN
+    IF (ComputationalNodeNumber == 0) PRINT *, (NumberOfSubdomainsX-1)*(NumberOfSubdomainsY-1), &
+      & " process(es) on    z+ boundary have ", normalNumberOfElements-actualNumberOfElements," elements less (only ", &
       & 100.*actualNumberOfElements/normalNumberOfElements,"%)"
   ENDIF
   
@@ -2223,8 +2237,8 @@ SUBROUTINE ComputeSubdomainsWithAtoms()
     *((NumberOfAtomsLastSubdomainY-1)*NumberOfElementsInAtomY + NumberOfElementsLastAtomY) &
     *NumberOfAtomsPerSubdomainZ*NumberOfElementsInAtomZ
         
-  IF (nSubdomainsZ-1 > 0 .AND. actualNumberOfElements < normalNumberOfElements) THEN
-    IF (ComputationalNodeNumber == 0) PRINT *, nSubdomainsZ-1, " process(es) on x+,y+ boundary have ", &
+  IF (NumberOfSubdomainsZ-1 > 0 .AND. actualNumberOfElements < normalNumberOfElements) THEN
+    IF (ComputationalNodeNumber == 0) PRINT *, NumberOfSubdomainsZ-1, " process(es) on x+,y+ boundary have ", &
       & normalNumberOfElements-actualNumberOfElements," elements less (only ", &
       & 100.*actualNumberOfElements/normalNumberOfElements,"%)"
   ENDIF
@@ -2235,8 +2249,8 @@ SUBROUTINE ComputeSubdomainsWithAtoms()
     *NumberOfAtomsPerSubdomainY*NumberOfElementsInAtomY &
     *((NumberOfAtomsLastSubdomainZ-1)*NumberOfElementsInAtomZ + NumberOfElementsLastAtomZ)
         
-  IF (nSubdomainsY-1 > 0 .AND. actualNumberOfElements < normalNumberOfElements) THEN
-    IF (ComputationalNodeNumber == 0) PRINT *, nSubdomainsY-1, " process(es) on x+,z+ boundary have ", &
+  IF (NumberOfSubdomainsY-1 > 0 .AND. actualNumberOfElements < normalNumberOfElements) THEN
+    IF (ComputationalNodeNumber == 0) PRINT *, NumberOfSubdomainsY-1, " process(es) on x+,z+ boundary have ", &
       & normalNumberOfElements-actualNumberOfElements," elements less (only ", &
       & 100.*actualNumberOfElements/normalNumberOfElements,"%)"
   ENDIF
@@ -2247,8 +2261,8 @@ SUBROUTINE ComputeSubdomainsWithAtoms()
     *((NumberOfAtomsLastSubdomainY-1)*NumberOfElementsInAtomY + NumberOfElementsLastAtomY) &
     *((NumberOfAtomsLastSubdomainZ-1)*NumberOfElementsInAtomZ + NumberOfElementsLastAtomZ)
         
-  IF (nSubdomainsX-1 > 0 .AND. actualNumberOfElements < normalNumberOfElements) THEN
-    IF (ComputationalNodeNumber == 0) PRINT *, nSubdomainsX-1, " process(es) on y+,z+ boundary have ", &
+  IF (NumberOfSubdomainsX-1 > 0 .AND. actualNumberOfElements < normalNumberOfElements) THEN
+    IF (ComputationalNodeNumber == 0) PRINT *, NumberOfSubdomainsX-1, " process(es) on y+,z+ boundary have ", &
       & normalNumberOfElements-actualNumberOfElements," elements less (only ", &
       & 100.*actualNumberOfElements/normalNumberOfElements,"%)"
   ENDIF
@@ -2279,6 +2293,7 @@ SUBROUTINE CreateDecompositionFiniteElasticity()
   
   !--------------------------------------------------------------------------------------------------------------------------------
   ! Create a decomposition for global FE elements
+  ! The following global variables are read: NumberOfSubdomainsXYZ, NumberOfAtomsPerSubdomainXYZ, NumberOfAtomsLastSubdomainXYZ, NumberOfElementsInAtomXYZ, NumberOfElementsLastAtomXYZ
   CALL cmfe_Decomposition_Initialise(DecompositionFE,Err)
   CALL cmfe_Decomposition_CreateStart(DecompositionUserNumberFE,MeshFE,DecompositionFE,Err)
   CALL cmfe_Decomposition_CalculateFacesSet(DecompositionFE,.TRUE.,Err)
@@ -2291,24 +2306,24 @@ SUBROUTINE CreateDecompositionFiniteElasticity()
     ! assign domain values
         
     ! iterate over subdomains
-    DO SubdomainZ = 1,nSubdomainsZ
-      DO SubdomainY = 1,nSubdomainsY
-        DO SubdomainX = 1,nSubdomainsX
+    DO SubdomainZ = 1,NumberOfSubdomainsZ
+      DO SubdomainY = 1,NumberOfSubdomainsY
+        DO SubdomainX = 1,NumberOfSubdomainsX
         
-          DomainNo = (SubdomainZ-1)*nSubdomainsY*nSubdomainsX + (SubdomainY-1)*nSubdomainsX + SubdomainX-1
+          DomainNo = (SubdomainZ-1)*NumberOfSubdomainsY*NumberOfSubdomainsX + (SubdomainY-1)*NumberOfSubdomainsX + SubdomainX-1
           
           NumberOfAtomsCurrentSubdomainX = NumberOfAtomsPerSubdomainX
-          IF (SubdomainX == nSubdomainsX) THEN  ! last subdomain
+          IF (SubdomainX == NumberOfSubdomainsX) THEN  ! last subdomain
             NumberOfAtomsCurrentSubdomainX = NumberOfAtomsLastSubdomainX
           ENDIF
             
           NumberOfAtomsCurrentSubdomainY = NumberOfAtomsPerSubdomainY          
-          IF (SubdomainY == nSubdomainsY) THEN  ! last subdomain
+          IF (SubdomainY == NumberOfSubdomainsY) THEN  ! last subdomain
             NumberOfAtomsCurrentSubdomainY = NumberOfAtomsLastSubdomainY
           ENDIF
             
           NumberOfAtomsCurrentSubdomainZ = NumberOfAtomsPerSubdomainZ
-          IF (SubdomainZ == nSubdomainsZ) THEN  ! last subdomain
+          IF (SubdomainZ == NumberOfSubdomainsZ) THEN  ! last subdomain
             NumberOfAtomsCurrentSubdomainZ = NumberOfAtomsLastSubdomainZ
           ENDIF
             
@@ -2322,17 +2337,17 @@ SUBROUTINE CreateDecompositionFiniteElasticity()
               DO AtomX = 1,NumberOfAtomsCurrentSubdomainX
                   
                 NumberOfElementsCurrentAtomX = NumberOfElementsInAtomX
-                IF (SubdomainX == nSubdomainsX .AND. AtomX == NumberOfAtomsCurrentSubdomainX) THEN  ! last atom
+                IF (SubdomainX == NumberOfSubdomainsX .AND. AtomX == NumberOfAtomsCurrentSubdomainX) THEN  ! last atom
                   NumberOfElementsCurrentAtomX = NumberOfElementsLastAtomX
                 ENDIF
                   
                 NumberOfElementsCurrentAtomY = NumberOfElementsInAtomY
-                IF (SubdomainY == nSubdomainsY .AND. AtomY == NumberOfAtomsCurrentSubdomainY) THEN  ! last atom
+                IF (SubdomainY == NumberOfSubdomainsY .AND. AtomY == NumberOfAtomsCurrentSubdomainY) THEN  ! last atom
                   NumberOfElementsCurrentAtomY = NumberOfElementsLastAtomY
                 ENDIF
                   
                 NumberOfElementsCurrentAtomZ = NumberOfElementsInAtomZ
-                IF (SubdomainZ == nSubdomainsZ .AND. AtomZ == NumberOfAtomsCurrentSubdomainZ) THEN  ! last atom
+                IF (SubdomainZ == NumberOfSubdomainsZ .AND. AtomZ == NumberOfAtomsCurrentSubdomainZ) THEN  ! last atom
                   NumberOfElementsCurrentAtomZ = NumberOfElementsLastAtomZ
                 ENDIF
                   
@@ -3032,7 +3047,7 @@ SUBROUTINE InitializeFieldMonodomain()
     ! loop over elements of fibre, for each element, the right node is considered, except for the first element (on ElementIdx=0), then the left node of the first element is considered
     DO ElementIdx = 0, NumberOfElementsMPerFibre
       
-      ! compute the bioelectric element user number      
+      ! compute the bioelectric element user number
       IF (ElementIdx == 0) THEN   ! index 0 and 1 are both for the first element, but first for the left node, then for the right node
         MElementUserNumber = (FibreNo-1) * NumberOfElementsMPerFibre + 1
       ELSE
@@ -3387,23 +3402,30 @@ SUBROUTINE CreateProblem()
   CALL cmfe_Problem_Initialise(Problem,Err)
 
   IF (ModelType == 0) THEN    ! 3a, "MultiPhysStrain", old tomo mechanics
-    CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
-      & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_GUDUNOV_MONODOMAIN_1D3D_ELASTICITY_SUBTYPE],Problem,Err)
-      
+    IF (SplittingType == 1) THEN    ! Strang splitting
+      CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
+        & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_STRANG_MONODOMAIN_1D3D_ELASTICITY_SUBTYPE],Problem,Err)
+    ELSE      ! Godunov splitting
+      CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
+        & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_GUDUNOV_MONODOMAIN_1D3D_ELASTICITY_SUBTYPE],Problem,Err)
+    ENDIF
   ELSEIF (ModelType == 1) THEN ! 3, , "MultiPhysStrain", numerically more stable
-    CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
-      & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_MONODOMAIN_1D3D_ACTIVE_STRAIN_SUBTYPE],Problem,Err)
-  !  CALL cmfe_Problem_SpecificationSet(Problem,CMFE_PROBLEM_MULTI_PHYSICS_CLASS,CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE, &
-  !   & CMFE_PROBLEM_MONODOMAIN_1D3D_ACTIVE_STRAIN_SUBTYPE,Err)
-
+    IF (SplittingType == 1) THEN    ! Strang splitting
+      CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
+        & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_STRANG_MONODOMAIN_1D3D_ACTIVE_STRAIN_SUBTYPE],Problem,Err)
+    ELSE      ! Godunov splitting
+      CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
+        & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_GUDUNOV_MONODOMAIN_1D3D_ACTIVE_STRAIN_SUBTYPE],Problem,Err)
+      ENDIF
   ELSEIF (ModelType == 2) THEN ! 4, "Titin"
-    CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
-     & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_MONODOMAIN_ELASTICITY_W_TITIN_SUBTYPE],Problem,Err)
-  !  CALL cmfe_Problem_SpecificationSet(Problem,CMFE_PROBLEM_MULTI_PHYSICS_CLASS,CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE, &
-  !   & CMFE_PROBLEM_MONODOMAIN_ELASTICITY_W_TITIN_SUBTYPE,Err)
-
+    IF (SplittingType == 1) THEN    ! Strang splitting
+      CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
+       & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_STRANG_MONODOMAIN_ELASTICITY_W_TITIN_SUBTYPE],Problem,Err)
+    ELSE      ! Godunov splitting
+      CALL cmfe_Problem_CreateStart(ProblemUserNumber,[CMFE_PROBLEM_MULTI_PHYSICS_CLASS, &
+       & CMFE_PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE,CMFE_PROBLEM_GUDUNOV_MONODOMAIN_ELASTICITY_W_TITIN_SUBTYPE],Problem,Err)
+    ENDIF
   ENDIF
-
 
   CALL cmfe_Problem_CreateFinish(Problem,Err)
 
@@ -3443,27 +3465,34 @@ SUBROUTINE CreateControlLoops()
   CALL cmfe_Problem_ControlLoopGet(Problem,[ControlLoopMonodomainNumber,CMFE_CONTROL_LOOP_NODE],ControlLoopM,Err)
   CALL cmfe_ControlLoop_LabelSet(ControlLoopM,'MONODOMAIN_TIME_LOOP',Err)
   CALL cmfe_ControlLoop_TimesSet(ControlLoopM,0.0_CMISSRP,ElasticityTimeStep,PDETimeStep,Err)
-
+  ! question from Aaron: is the following necessary, or is the TimesSet-CALL before sufficient?
+  IF (PdeNSteps /= -1) THEN
+    CALL cmfe_ControlLoop_NumberOfIterationsSet(ControlLoopM,PdeNSteps,Err)
+  ENDIF
+  
   IF (DebuggingOutput) THEN
     CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopM,CMFE_CONTROL_LOOP_TIMING_OUTPUT,Err)
     !CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopM,CMFE_CONTROL_LOOP_NO_OUTPUT,Err)
   ELSE
     CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopM,CMFE_CONTROL_LOOP_NO_OUTPUT,Err)
+    !CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopM,CMFE_CONTROL_LOOP_FILE_OUTPUT,Err)
   ENDIF
 
   !set the finite elasticity loop (simple type)
-  CALL cmfe_ControlLoop_Initialise(ControlLoopFE,Err)
-  CALL cmfe_Problem_ControlLoopGet(Problem,[ControlLoopElasticityNumber,CMFE_CONTROL_LOOP_NODE],ControlLoopFE,Err)
-  CALL cmfe_ControlLoop_TypeSet(ControlLoopFE,CMFE_PROBLEM_CONTROL_LOAD_INCREMENT_LOOP_TYPE,Err)
-  CALL cmfe_ControlLoop_MaximumIterationsSet(ControlLoopFE,ElasticityLoopMaximumNumberOfIterations,Err)
-  CALL cmfe_ControlLoop_LabelSet(ControlLoopFE,'ELASTICITY_LOOP',Err)
+  IF (.NOT. elasticityDisabled) THEN
+    CALL cmfe_ControlLoop_Initialise(ControlLoopFE,Err)
+    CALL cmfe_Problem_ControlLoopGet(Problem,[ControlLoopElasticityNumber,CMFE_CONTROL_LOOP_NODE],ControlLoopFE,Err)
+    CALL cmfe_ControlLoop_TypeSet(ControlLoopFE,CMFE_PROBLEM_CONTROL_LOAD_INCREMENT_LOOP_TYPE,Err)
+    CALL cmfe_ControlLoop_MaximumIterationsSet(ControlLoopFE,ElasticityLoopMaximumNumberOfIterations,Err)
+    CALL cmfe_ControlLoop_LabelSet(ControlLoopFE,'ELASTICITY_LOOP',Err)
 
-  IF (DebuggingOutput) THEN
-    CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopFE,CMFE_CONTROL_LOOP_TIMING_OUTPUT,Err)
-  ELSE
-    CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopFE,CMFE_CONTROL_LOOP_NO_OUTPUT,Err)
+    IF (DebuggingOutput) THEN
+      CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopFE,CMFE_CONTROL_LOOP_TIMING_OUTPUT,Err)
+    ELSE
+      CALL cmfe_ControlLoop_OutputTypeSet(ControlLoopFE,CMFE_CONTROL_LOOP_NO_OUTPUT,Err)
+    ENDIF
   ENDIF
-
+    
   CALL cmfe_Problem_ControlLoopCreateFinish(Problem,Err)
 
 END SUBROUTINE CreateControlLoops
@@ -3515,7 +3544,7 @@ SUBROUTINE CreateSolvers()
   !CALL cmfe_Solver_DAESolverTypeSet(SolverDAE,CMFE_SOLVER_DAE_EXTERNAL,Err)
 
   IF (DebuggingOutput) THEN
-    CALL cmfe_Solver_OutputTypeSet(SolverDAE,CMFE_SOLVER_NO_OUTPUT,Err)
+    CALL cmfe_Solver_OutputTypeSet(SolverDAE,CMFE_SOLVER_SOLVER_OUTPUT,Err)
     !CALL cmfe_Solver_OutputTypeSet(SolverDAE,CMFE_SOLVER_PROGRESS_OUTPUT,Err)
     !CALL cmfe_Solver_OutputTypeSet(SolverDAE,CMFE_SOLVER_TIMING_OUTPUT,Err)
     !CALL cmfe_Solver_OutputTypeSet(SolverDAE,CMFE_SOLVER_SOLVER_OUTPUT,Err)
@@ -3524,13 +3553,18 @@ SUBROUTINE CreateSolvers()
     CALL cmfe_Solver_OutputTypeSet(SolverDAE,CMFE_SOLVER_NO_OUTPUT,Err)
   ENDIF
 
+  !-----------------------------------------------------------------------------------------------------
   !Create the parabolic solver
   CALL cmfe_Solver_Initialise(SolverParabolic,Err)
   CALL cmfe_Problem_SolverGet(Problem,[ControlLoopMonodomainNumber,CMFE_CONTROL_LOOP_NODE], &
    & SolverParabolicIndex,SolverParabolic,Err)
   
-  CALL cmfe_Solver_DynamicSchemeSet(SolverParabolic,CMFE_SOLVER_DYNAMIC_BACKWARD_EULER_SCHEME,Err)
-  
+
+  IF (SplittingType == 1) THEN    ! Strang splitting      
+    CALL cmfe_Solver_DynamicSchemeSet(SolverParabolic,CMFE_SOLVER_DYNAMIC_CRANK_NICOLSON_SCHEME,Err)
+  ELSE    ! Godunov splitting
+    CALL cmfe_Solver_DynamicSchemeSet(SolverParabolic,CMFE_SOLVER_DYNAMIC_BACKWARD_EULER_SCHEME,Err)
+  ENDIF
   
   ! data structure is as follows:
   ! SolverParabolic
@@ -3914,7 +3948,7 @@ SUBROUTINE SetStimulationAtNodes(StimValuePerNode)
     CurrentFibreFires = .FALSE.
     
     ! get middle point of fibre
-    JunctionNodeNo = (FibreNo-1) * NumberOfNodesPerLongFibre + NumberOfNodesPerLongFibre/2 + 1
+    JunctionNodeNo = (FibreNo-1) * NumberOfNodesPerLongFibre + (NumberOfNodesPerLongFibre+1)/2
     
     ! add innervation zone offset
     JunctionNodeNo = JunctionNodeNo + InnervationZoneOffset(FibreNo)
@@ -3938,7 +3972,8 @@ SUBROUTINE SetStimulationAtNodes(StimValuePerNode)
         & StimulatedNodeNo,1,MotorUnitRank,Err)
 
         IF ((MotorUnitRank <= 0) .OR. (MotorUnitRank >= 101)) THEN
-          PRINT*, "Warning! MotorUnitRank=",MotorUnitRank,", set to 100"
+          PRINT*, ComputationalNodeNumber,": Warning! MotorUnitRank=",MotorUnitRank,", set to 100. Fibre ", FibreNo, &
+             & ", Node", StimulatedNodeNo
           MotorUnitRank=100
         ELSE
           !PRINT*, "MotorUnitFiringTimes row k=", k, ": MU rank=", MotorUnitRank, ", StimComponent=",StimComponent
@@ -4117,8 +4152,8 @@ SUBROUTINE WriteTimingFile()
       & 'duration FESolverPreLoad; duration OdeSolverPreLoad; duration ParabolicSolverPreLoad; ' // &
       & 'duration FileOutputPreLoad (user); duration export EMG user; duration export EMG system; duration FileOutput (user); ' // &
       & 'duration FileOutput (system); duration FileOutputPreload (system); MonodomainSolverId; MonodomainPreconditionerId; ' // &
-      & 'ODESolverId; NumberOfElementsInAtomX; NumberOfElementsInAtomY; NumberOfElementsInAtomZ; nSubdomainsX; nSubdomainsY; ' // &
-      & 'nSubdomainsZ; ModelType'
+      & 'ODESolverId; NumberOfElementsInAtomX; NumberOfElementsInAtomY; NumberOfElementsInAtomZ; NumberOfSubdomainsX; ' // & 
+      & 'NumberOfSubdomainsY; NumberOfSubdomainsZ; ModelType; ScenarioName'
       
     CLOSE(unit=123)
   ENDIF
@@ -4140,7 +4175,7 @@ SUBROUTINE WriteTimingFile()
 
   IF (CustomProfilingEnabled) THEN
 
-    WRITE(123,"(4A,7(I11,A),(F8.3,A),11(F0.8,A),2(A,A),8(I7,A),21(F25.13,A),A,A,9(F8.3,A),3(I2,A),6(I8,A),I1)") &
+    WRITE(123,"(4A,7(I11,A),(F8.3,A),11(F0.8,A),2(A,A),8(I7,A),21(F25.13,A),A,A,9(F8.3,A),3(I2,A),6(I8,A),I1,2A)") &
       & TRIM(TimeStampStr), ';', &
       & TRIM(Hostname(1:22)), ';', &          ! end of 4A
       & NumberOfComputationalNodes, ';', &
@@ -4236,14 +4271,15 @@ SUBROUTINE WriteTimingFile()
       & NumberOfElementsInAtomX, ';', &
       & NumberOfElementsInAtomY, ';', &
       & NumberOfElementsInAtomZ, ';', &                 
-      & nSubdomainsX, ';', &
-      & nSubdomainsY, ';', &
-      & nSubdomainsZ, ';', &                            ! end of 6(I8,A)
-      & ModelType                                       ! I1
+      & NumberOfSubdomainsX, ';', &
+      & NumberOfSubdomainsY, ';', &
+      & NumberOfSubdomainsZ, ';', &                            ! end of 6(I8,A)
+      & ModelType, ';', &                                       ! I1
+      & TRIM(ScenarioName)
 
   ELSE  ! custom profiling is disabled
     
-    WRITE(123,"(4A,7(I11,A),(F8.3,A),11(F0.8,A),2(A,A),8(I7,A),9(F8.3,A),3(I2,A),6(I8,A),I1)") &
+    WRITE(123,"(4A,7(I11,A),(F8.3,A),11(F0.8,A),2(A,A),8(I7,A),9(F8.3,A),3(I2,A),6(I8,A),I1,2A)") &
       & TRIM(TimeStampStr), ';', &
       & TRIM(Hostname(1:22)), ';', &                    ! end of 4A
       & NumberOfComputationalNodes, ';', &
@@ -4290,10 +4326,11 @@ SUBROUTINE WriteTimingFile()
       & NumberOfElementsInAtomX, ';', &
       & NumberOfElementsInAtomY, ';', &
       & NumberOfElementsInAtomZ, ';', &
-      & nSubdomainsX, ';', &
-      & nSubdomainsY, ';', &
-      & nSubdomainsZ, ';', &                          ! end of 6(I8,A)
-      & ModelType                                     ! I1
+      & NumberOfSubdomainsX, ';', &
+      & NumberOfSubdomainsY, ';', &
+      & NumberOfSubdomainsZ, ';', &                          ! end of 6(I8,A)
+      & ModelType, ';', &                                     ! I1
+      & TRIM(ScenarioName)
   ENDIF
 
   CLOSE(unit=123)
@@ -4405,4 +4442,5 @@ SUBROUTINE gdbParallelDebuggingBarrier()
 END SUBROUTINE gdbParallelDebuggingBarrier
 
 END PROGRAM LARGEUNIAXIALEXTENSIONEXAMPLE
+
 
